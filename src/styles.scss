@@ -1,1 +1,269 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global Styles */
+:root {
+  /* Primary Colors - Rich Burgundy */
+  --primary-50: #fff5f8;
+  --primary-100: #ffe5ed;
+  --primary-200: #ffb3cc;
+  --primary-300: #ff80aa;
+  --primary-400: #cc4d77;
+  --primary-500: #990044;
+  --primary-600: #660033;
+  --primary-700: #4d0026;
+  --primary-800: #330019;
+  --primary-900: #1a000d;
+
+  /* Accent Colors - Warm Gold */
+  --accent-50: #fff8e5;
+  --accent-100: #ffe5b3;
+  --accent-200: #ffd280;
+  --accent-300: #ffbf4d;
+  --accent-400: #ffac1a;
+  --accent-500: #e69500;
+  --accent-600: #b37400;
+  --accent-700: #805300;
+  --accent-800: #4d3200;
+  --accent-900: #1a1100;
+
+  /* Neutral Colors - Warm Gray */
+  --neutral-50: #fafafa;
+  --neutral-100: #f5f5f5;
+  --neutral-200: #e6e6e6;
+  --neutral-300: #d6d6d6;
+  --neutral-400: #a8a8a8;
+  --neutral-500: #8c8c8c;
+  --neutral-600: #666666;
+  --neutral-700: #525252;
+  --neutral-800: #333333;
+  --neutral-900: #1f1f1f;
+
+  /* Semantic Colors */
+  --success-500: #2e7d32;
+  --warning-500: #ed6c02;
+  --error-500: #d32f2f;
+
+  /* Spacing System */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+  --space-7: 64px;
+  --space-8: 96px;
+  --space-9: 128px;
+
+  /* Typography */
+  --font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --font-family-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: var(--font-family-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--neutral-800);
+  background-color: var(--neutral-50);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-family);
+  line-height: 1.2;
+  margin-bottom: var(--space-3);
+  font-weight: 600;
+  color: var(--neutral-900);
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+p {
+  margin-bottom: var(--space-3);
+}
+
+a {
+  color: var(--primary-600);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+  color: var(--primary-500);
+  text-decoration: underline;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* Utility Classes */
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(102, 0, 51, 0.08);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(102, 0, 51, 0.12);
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+}
+
+.text-primary {
+  color: var(--primary-600);
+}
+
+.text-accent {
+  color: var(--accent-600);
+}
+
+.text-success {
+  color: var(--success-500);
+}
+
+.text-warning {
+  color: var(--warning-500);
+}
+
+.text-error {
+  color: var(--error-500);
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-primary {
+  background-color: var(--primary-50);
+  color: var(--primary-600);
+}
+
+.badge-accent {
+  background-color: var(--accent-50);
+  color: var(--accent-600);
+}
+
+.badge-success {
+  background-color: #e6f4ea;
+  color: var(--success-500);
+}
+
+.badge-warning {
+  background-color: #fff3e0;
+  color: var(--warning-500);
+}
+
+.badge-error {
+  background-color: #fdeded;
+  color: var(--error-500);
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 576px) {
+  h1 {
+    font-size: 2rem;
+  }
+  h2 {
+    font-size: 1.75rem;
+  }
+  h3 {
+    font-size: 1.5rem;
+  }
+  .container {
+    padding: 0 var(--space-3);
+  }
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: var(--space-3);
+  }
+}
+
+/* Angular Material Customizations */
+.mat-mdc-form-field {
+  width: 100%;
+  margin-bottom: var(--space-3);
+}
+
+.mat-mdc-button {
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.mat-mdc-card {
+  border-radius: 12px;
+  overflow: hidden;
+}

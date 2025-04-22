@@ -1,0 +1,118 @@
+<div class="event-list-container">
+    <header class="page-header">
+      <div class="container">
+        <h1>Events</h1>
+        <p>Manage your upcoming and past events</p>
+        <a routerLink="/events/new" class="btn-primary">
+          <i class="material-icons">add</i> Create Event
+        </a>
+      </div>
+    </header>
+  
+    <div class="container">
+      <div class="filters-bar card">
+        <div class="search-box">
+          <i class="material-icons">search</i>
+          <input 
+            type="text" 
+            placeholder="Search events..." 
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+          >
+        </div>
+        
+        <div class="filters">
+          <div class="filter-group">
+            <label for="statusFilter">Status:</label>
+            <select 
+              id="statusFilter" 
+              [(ngModel)]="statusFilter"
+              (change)="onStatusFilterChange()"
+            >
+              <option value="all">All</option>
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="sortBy">Sort by:</label>
+            <select 
+              id="sortBy" 
+              [(ngModel)]="sortBy"
+              (change)="onSortChange()"
+            >
+              <option value="date">Date</option>
+              <option value="title">Title</option>
+              <option value="status">Status</option>
+            </select>
+            <button class="sort-direction" (click)="toggleSortDirection()">
+              <i class="material-icons">
+                {{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+              </i>
+            </button>
+          </div>
+        </div>
+      </div>
+  
+      <div class="events-table-container card" *ngIf="!loading; else loadingTemplate">
+        <table class="events-table" *ngIf="filteredEvents.length > 0; else noDataTemplate">
+          <thead>
+            <tr>
+              <th>Event Title</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Type</th>
+              <th>Attendees</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let event of filteredEvents" class="fade-in">
+              <td class="event-title">
+                <a [routerLink]="['/events', event.id]">{{ event.title }}</a>
+              </td>
+              <td>{{ formatDate(event.startDate) }}</td>
+              <td>{{ formatTime(event.startDate) }} - {{ formatTime(event.endDate) }}</td>
+              <td>{{ event.type | titlecase }}</td>
+              <td>{{ event.attendees }}</td>
+              <td>
+                <span [class]="getEventStatusClass(event.status)">
+                  {{ event.status | titlecase }}
+                </span>
+              </td>
+              <td class="actions">
+                <a [routerLink]="['/events', event.id]" class="action-btn">
+                  <i class="material-icons">visibility</i>
+                </a>
+                <a [routerLink]="['/events', event.id, 'edit']" class="action-btn">
+                  <i class="material-icons">edit</i>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #loadingTemplate>
+    <div class="loading-container card">
+      <div class="loading-spinner"></div>
+      <p>Loading events...</p>
+    </div>
+  </ng-template>
+  
+  <ng-template #noDataTemplate>
+    <div class="no-data-container">
+      <i class="material-icons">event_busy</i>
+      <h3>No events found</h3>
+      <p>There are no events matching your search criteria.</p>
+      <button class="btn-secondary" (click)="searchTerm = ''; statusFilter = 'all'; applyFilters()">
+        Clear Filters
+      </button>
+    </div>
+  </ng-template>

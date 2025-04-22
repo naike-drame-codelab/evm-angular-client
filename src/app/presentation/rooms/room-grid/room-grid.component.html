@@ -1,0 +1,143 @@
+<div class="room-grid-container">
+    <header class="page-header">
+      <div class="container">
+        <h1>Venue Spaces</h1>
+        <p>Browse and manage all available spaces in your venue</p>
+        <a routerLink="/rooms/new" class="btn-primary">
+          <i class="material-icons">add</i> Add New Space
+        </a>
+      </div>
+    </header>
+  
+    <div class="container">
+      <div class="filters-bar card">
+        <div class="search-box">
+          <i class="material-icons">search</i>
+          <input 
+            type="text" 
+            placeholder="Search spaces..." 
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+          >
+        </div>
+        
+        <div class="filters">
+          <div class="filter-group">
+            <label for="typeFilter">Type:</label>
+            <select 
+              id="typeFilter" 
+              [(ngModel)]="typeFilter"
+              (change)="onFilterChange()"
+            >
+              <option value="all">All Types</option>
+              <option value="ballroom">Ballroom</option>
+              <option value="conference">Conference</option>
+              <option value="meeting">Meeting</option>
+              <option value="banquet">Banquet</option>
+              <option value="theater">Theater</option>
+              <option value="outdoor">Outdoor</option>
+            </select>
+          </div>
+          
+          <div class="filter-group">
+            <label for="capacityFilter">Min Capacity:</label>
+            <input 
+              type="number" 
+              id="capacityFilter"
+              [(ngModel)]="capacityMin"
+              (change)="onFilterChange()"
+              min="0"
+              step="10"
+            >
+          </div>
+          
+          <div class="filter-group">
+            <label for="sortBy">Sort by:</label>
+            <select 
+              id="sortBy" 
+              [(ngModel)]="sortBy"
+              (change)="onSortChange()"
+            >
+              <option value="name">Name</option>
+              <option value="capacity">Capacity</option>
+              <option value="rate">Rate</option>
+            </select>
+            <button class="sort-direction" (click)="toggleSortDirection()">
+              <i class="material-icons">
+                {{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+              </i>
+            </button>
+          </div>
+        </div>
+      </div>
+  
+      <div *ngIf="!loading; else loadingTemplate">
+        <div class="room-grid" *ngIf="filteredRooms.length > 0; else noDataTemplate">
+          <div class="room-card card fade-in" *ngFor="let room of filteredRooms">
+            <div class="room-image">
+              <img [src]="room.images[0]" [alt]="room.name">
+              <div class="room-type">
+                <i class="material-icons">{{ getRoomTypeIcon(room.roomType) }}</i>
+                <span>{{ room.roomType | titlecase }}</span>
+              </div>
+            </div>
+            <div class="room-content">
+              <h2>{{ room.name }}</h2>
+              <p class="room-description">{{ room.description }}</p>
+              <div class="room-details">
+                <div class="room-detail">
+                  <i class="material-icons">people</i>
+                  <span>{{ room.capacity }} people</span>
+                </div>
+                <div class="room-detail">
+                  <i class="material-icons">attach_money</i>
+                  <span>{{ formatCurrency(room.hourlyRate) }}/hour</span>
+                </div>
+                <div class="room-detail">
+                  <i class="material-icons">layers</i>
+                  <span>Floor {{ room.floor }}</span>
+                </div>
+              </div>
+              <div class="room-amenities">
+                <h3>Amenities</h3>
+                <div class="amenity-tags">
+                  <span class="amenity-tag" *ngFor="let amenity of room.amenities.slice(0, 3)">
+                    {{ amenity }}
+                  </span>
+                  <span class="amenity-more" *ngIf="room.amenities.length > 3">
+                    +{{ room.amenities.length - 3 }} more
+                  </span>
+                </div>
+              </div>
+              <div class="room-actions">
+                <a [routerLink]="['/rooms', room.id]" class="btn-secondary">
+                  <i class="material-icons">visibility</i> View Details
+                </a>
+                <a [routerLink]="['/rooms/book', room.id]" class="btn-primary">
+                  <i class="material-icons">event</i> Book Now
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #loadingTemplate>
+    <div class="loading-container card">
+      <div class="loading-spinner"></div>
+      <p>Loading spaces...</p>
+    </div>
+  </ng-template>
+  
+  <ng-template #noDataTemplate>
+    <div class="no-data-container card">
+      <i class="material-icons">meeting_room</i>
+      <h3>No spaces found</h3>
+      <p>There are no spaces matching your search criteria.</p>
+      <button class="btn-secondary" (click)="searchTerm = ''; typeFilter = 'all'; capacityMin = 0; applyFilters()">
+        Clear Filters
+      </button>
+    </div>
+  </ng-template>

@@ -1,0 +1,334 @@
+.dashboard-container {
+    min-height: 100vh;
+  }
+  
+  .dashboard-header {
+    background-color: var(--primary-900);
+    color: white;
+    padding: var(--space-5) 0;
+    margin-bottom: var(--space-4);
+  }
+  
+  .dashboard-header h1 {
+    color: white;
+    margin-bottom: var(--space-2);
+  }
+  
+  .dashboard-header .date {
+    color: var(--neutral-300);
+    font-size: 1rem;
+  }
+  
+  .metrics-section {
+    margin-bottom: var(--space-5);
+  }
+  
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+  }
+  
+  .metric-card {
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .metric-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .metric-icon {
+    background-color: var(--primary-100);
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: var(--space-3);
+  }
+  
+  .metric-icon i {
+    color: var(--primary-700);
+    font-size: 28px;
+  }
+  
+  .metric-content {
+    flex: 1;
+  }
+  
+  .metric-content h3 {
+    font-size: 0.9rem;
+    color: var(--neutral-600);
+    margin-bottom: var(--space-1);
+  }
+  
+  .metric-value {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--neutral-900);
+    margin-bottom: 0;
+  }
+  
+  .metric-detail {
+    font-size: 0.85rem;
+    color: var(--neutral-600);
+    margin-top: 2px;
+    margin-bottom: 0;
+  }
+  
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+  
+  .events-section, .clients-section {
+    overflow: hidden;
+    padding-bottom: var(--space-2);
+  }
+  
+  .events-section h2, .clients-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--neutral-200);
+  }
+  
+  .events-list, .clients-list {
+    margin-bottom: var(--space-3);
+  }
+  
+  .event-item {
+    display: flex;
+    align-items: center;
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--neutral-200);
+    transition: background-color 0.2s ease;
+  }
+  
+  .event-item:last-child {
+    border-bottom: none;
+  }
+  
+  .event-item:hover {
+    background-color: var(--neutral-50);
+  }
+  
+  .event-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background-color: var(--primary-50);
+    border-radius: 12px;
+    margin-right: var(--space-3);
+    border: 1px solid var(--primary-100);
+  }
+  
+  .event-date .day {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--primary-700);
+    line-height: 1;
+  }
+  
+  .event-date .month {
+    font-size: 0.8rem;
+    color: var(--primary-600);
+    text-transform: uppercase;
+  }
+  
+  .event-details {
+    flex: 1;
+  }
+  
+  .event-details h3 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+  
+  .event-time, .event-type {
+    font-size: 0.85rem;
+    color: var(--neutral-600);
+    margin-bottom: 2px;
+  }
+  
+  .event-status {
+    margin-left: var(--space-2);
+  }
+  
+  .client-item {
+    display: flex;
+    align-items: center;
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--neutral-200);
+    transition: background-color 0.2s ease;
+  }
+  
+  .client-item:last-child {
+    border-bottom: none;
+  }
+  
+  .client-item:hover {
+    background-color: var(--neutral-50);
+  }
+  
+  .client-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--accent-100);
+    color: var(--accent-700);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-right: var(--space-3);
+  }
+  
+  .client-details {
+    flex: 1;
+  }
+  
+  .client-details h3 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+  
+  .client-company, .client-contact {
+    font-size: 0.85rem;
+    color: var(--neutral-600);
+    margin-bottom: 2px;
+  }
+  
+  .view-all {
+    text-align: center;
+    padding-top: var(--space-2);
+  }
+  
+  .view-all a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--primary-600);
+    text-decoration: none;
+  }
+  
+  .view-all a:hover {
+    text-decoration: underline;
+  }
+  
+  .quick-actions {
+    margin-bottom: var(--space-5);
+  }
+  
+  .quick-actions h2 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-3);
+  }
+  
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+  }
+  
+  .action-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3);
+    background-color: var(--primary-50);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--primary-700);
+    transition: all 0.2s ease;
+  }
+  
+  .action-button:hover {
+    background-color: var(--primary-100);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+  }
+  
+  .action-button i {
+    font-size: 2rem;
+    margin-bottom: var(--space-2);
+  }
+  
+  .action-button span {
+    font-weight: 500;
+  }
+  
+  .loading-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+  }
+  
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--neutral-200);
+    border-top: 4px solid var(--primary-600);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  .no-data {
+    padding: var(--space-4);
+    text-align: center;
+    color: var(--neutral-500);
+    font-style: italic;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 992px) {
+    .metrics-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .dashboard-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .actions-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .metrics-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .event-item, .client-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .event-date, .client-avatar {
+      margin-bottom: var(--space-2);
+    }
+    
+    .event-status {
+      margin-left: 0;
+      margin-top: var(--space-2);
+    }
+  }
