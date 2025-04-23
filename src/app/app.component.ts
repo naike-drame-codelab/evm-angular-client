@@ -12,9 +12,9 @@ import { RoomGridComponent } from './presentation/rooms/room-grid/room-grid.comp
     CommonModule, 
     RouterOutlet, 
     RouterModule,
-    OverviewComponent,
-    EventListComponent,
-    RoomGridComponent
+    // OverviewComponent,
+    // EventListComponent,
+    // RoomGridComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
