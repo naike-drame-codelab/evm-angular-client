@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterModule } from '@angular/router';
-import { OverviewComponent } from './presentation/dashboard/overview.component';
+import { OverviewComponent } from './presentation/dashboard/client/overview/overview.component';
 import { EventListComponent } from './presentation/events/event-list/event-list.component';
 import { RoomGridComponent } from './presentation/rooms/room-grid/room-grid.component';
 
