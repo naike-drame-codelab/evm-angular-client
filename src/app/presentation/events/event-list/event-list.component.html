@@ -75,8 +75,8 @@
               <td class="event-title">
                 <a [routerLink]="['/events', event.id]">{{ event.title }}</a>
               </td>
-              <td>{{ formatDate(event.startDate) }}</td>
-              <td>{{ formatTime(event.startDate) }} - {{ formatTime(event.endDate) }}</td>
+              <td>{{ event.startDate | formatDate }}</td>
+              <td>{{ event.startDate | formatTime }} - {{ event.endDate | formatTime }}</td>
               <td>{{ event.type | titlecase }}</td>
               <td>{{ event.attendees }}</td>
               <td>

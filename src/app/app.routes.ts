@@ -6,6 +6,7 @@ import { RoomGridComponent } from './presentation/rooms/room-grid/room-grid.comp
 import { AuthComponent } from './presentation/auth/auth/auth.component';
 import { NotFoundComponent } from './presentation/not-found/not-found/not-found.component';
 import { LayoutComponent } from './presentation/dashboard/client/layout/layout.component';
+import { EventFormComponent } from './presentation/events/event-form/event-form.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -15,16 +16,17 @@ export const routes: Routes = [
   // Autres routes
   {
     path: 'client',
-    component: LayoutComponent, // Assuming your layout component is named LayoutComponent
+    component: LayoutComponent,
     children: [
       { path: 'overview', component: OverviewComponent },
       { path: 'events', component: EventListComponent },
+      { path: 'events/new', component: EventFormComponent},
       { path: 'rooms', component: RoomGridComponent },
     ],
   },
   {
     path: 'admin',
-    component: LayoutComponent, // Assuming your layout component is named LayoutComponent
+    component: LayoutComponent,
     children: [
       { path: 'overview', component: OverviewComponent },
       { path: 'events', component: EventListComponent },

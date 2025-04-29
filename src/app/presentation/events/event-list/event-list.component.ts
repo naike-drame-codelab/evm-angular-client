@@ -4,11 +4,13 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '../../../core/services/event.service';
 import { Event, EventStatus } from '../../../core/models/event.model';
+import { FormatDatePipe } from '../../../shared/pipes/format-date.pipe';
+import { FormatTimePipe } from '../../../shared/pipes/format-time.pipe';
 
 @Component({
   selector: 'app-event-list',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, FormatDatePipe, FormatTimePipe],
   templateUrl: './event-list.component.html',
   styleUrls: ['./event-list.component.scss']
 })
@@ -21,7 +23,7 @@ export class EventListComponent implements OnInit {
   sortBy: 'date' | 'title' | 'status' = 'date';
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  constructor(private eventService: EventService) {}
+  constructor(private eventService: EventService) { }
 
   ngOnInit(): void {
     this.loadEvents();
@@ -44,25 +46,25 @@ export class EventListComponent implements OnInit {
 
   applyFilters(): void {
     let result = [...this.events];
-    
+
     // Apply search filter
     if (this.searchTerm.trim()) {
       const term = this.searchTerm.toLowerCase();
-      result = result.filter(event => 
-        event.title.toLowerCase().includes(term) || 
+      result = result.filter(event =>
+        event.title.toLowerCase().includes(term) ||
         event.description.toLowerCase().includes(term)
       );
     }
-    
+
     // Apply status filter
     if (this.statusFilter !== 'all') {
       result = result.filter(event => event.status === this.statusFilter);
     }
-    
+
     // Apply sorting
     result.sort((a, b) => {
       let comparison = 0;
-      
+
       if (this.sortBy === 'date') {
         comparison = new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
       } else if (this.sortBy === 'title') {
@@ -70,10 +72,10 @@ export class EventListComponent implements OnInit {
       } else if (this.sortBy === 'status') {
         comparison = a.status.localeCompare(b.status);
       }
-      
+
       return this.sortDirection === 'asc' ? comparison : -comparison;
     });
-    
+
     this.filteredEvents = result;
   }
 
@@ -104,19 +106,19 @@ export class EventListComponent implements OnInit {
     }
   }
 
-  formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('en-US', { 
-      weekday: 'short',
-      month: 'short', 
-      day: 'numeric',
-      year: 'numeric'
-    });
-  }
+  // formatDate(date: Date): string {
+  //   return new Date(date).toLocaleDateString('en-US', { 
+  //     weekday: 'short',
+  //     month: 'short', 
+  //     day: 'numeric',
+  //     year: 'numeric'
+  //   });
+  // }
 
-  formatTime(date: Date): string {
-    return new Date(date).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  }
+  // formatTime(date: Date): string {
+  //   return new Date(date).toLocaleTimeString('en-US', {
+  //     hour: '2-digit',
+  //     minute: '2-digit'
+  //   });
+  // }
 }
