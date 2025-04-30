@@ -164,3 +164,101 @@ export class EventService {
     return of(events).pipe(delay(500));
   }
 }
+
+// src/app/core/services/event.service.ts
+
+// import { Injectable, inject } from '@angular/core';
+// import { HttpClient, HttpHeaders } from '@angular/common/http';
+// import { Observable, catchError, throwError } from 'rxjs';
+// import { environment } from '../../../environments/environment'; // Adjust path if needed
+// import { EventDto, CreateEventDto, UpdateEventDto } from '../models/event.model'; // Adjust path if needed
+
+// @Injectable({
+//   providedIn: 'root'
+// })
+// export class EventService {
+//   private http = inject(HttpClient);
+//   // Get API URL from environment variables
+//   private apiUrl = `${environment.apiUrl}/api/events`;
+
+//   /**
+//    * Retrieves the authentication token.
+//    * Replace this with your actual token retrieval logic (e.g., from AuthService).
+//    */
+//   private getToken(): string | null {
+//     // Example: return localStorage.getItem('authToken');
+//     // Example: return inject(AuthService).getToken();
+//     return localStorage.getItem('authToken'); // Placeholder
+//   }
+
+//   /**
+//    * Creates HttpHeaders with the Authorization token.
+//    */
+//   private getAuthHeaders(): HttpHeaders {
+//     const token = this.getToken();
+//     let headers = new HttpHeaders({
+//       'Content-Type': 'application/json'
+//     });
+//     if (token) {
+//       headers = headers.set('Authorization', `Bearer ${token}`);
+//     }
+//     return headers;
+//   }
+
+//   /**
+//    * Handles HTTP errors.
+//    */
+//   private handleError(error: any): Observable<never> {
+//     console.error('API Error:', error);
+//     // Enhance error handling based on your needs (e.g., user-friendly messages)
+//     return throwError(() => new Error('An error occurred. Please try again later.'));
+//   }
+
+//   /**
+//    * Récupère tous les événements.
+//    */
+//   getEvents(): Observable<EventDto[]> {
+//     return this.http.get<EventDto[]>(this.apiUrl, { headers: this.getAuthHeaders() })
+//       .pipe(catchError(this.handleError));
+//   }
+
+//   /**
+//    * Récupère un événement par son ID.
+//    * @param id L'ID de l'événement.
+//    */
+//   getEventById(id: number): Observable<EventDto> {
+//     return this.http.get<EventDto>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() })
+//       .pipe(catchError(this.handleError));
+//   }
+
+//   /**
+//    * Crée un nouvel événement.
+//    * L'organizerId est généralement défini côté backend à partir de l'utilisateur authentifié.
+//    * @param eventData Les données du nouvel événement.
+//    */
+//   createEvent(eventData: CreateEventDto): Observable<EventDto> {
+//     return this.http.post<EventDto>(this.apiUrl, eventData, { headers: this.getAuthHeaders() })
+//       .pipe(catchError(this.handleError));
+//   }
+
+//   /**
+//    * Met à jour un événement existant.
+//    * @param id L'ID de l'événement à mettre à jour.
+//    * @param eventData Les nouvelles données de l'événement.
+//    */
+//   updateEvent(id: number, eventData: UpdateEventDto): Observable<void> {
+//     // PUT requests often return NoContent (204), hence Observable<void>
+//     return this.http.put<void>(`${this.apiUrl}/${id}`, eventData, { headers: this.getAuthHeaders() })
+//       .pipe(catchError(this.handleError));
+//   }
+
+//   /**
+//    * Supprime un événement.
+//    * @param id L'ID de l'événement à supprimer.
+//    */
+//   deleteEvent(id: number): Observable<void> {
+//     // DELETE requests often return NoContent (204), hence Observable<void>
+//     return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() })
+//       .pipe(catchError(this.handleError));
+//   }
+// }

@@ -11,9 +11,25 @@
         <ul>
           <li><a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Accueil</a></li>
           <li><a routerLink="/events" routerLinkActive="active-link">Événements</a></li>
-          <li><a routerLink="/register" routerLinkActive="active-link">Inscription</a></li>
+          <!-- Lien Inscription: pointe vers /auth avec mode=register -->
+        <li>
+            <a
+              routerLink="/auth"
+              [queryParams]="{ mode: 'register' }"
+              routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{ exact: false }"
+              >Inscription</a
+            >
+          </li>
         </ul>
-        <button mat-stroked-button color="primary" routerLink="/login" class="login-button">
+        <!-- Bouton Connexion: pointe vers /auth avec mode=login (ou sans queryParams si login est le défaut) -->
+        <button
+          mat-stroked-button
+          color="primary"
+          routerLink="/auth"
+          [queryParams]="{ mode: 'login' }"
+          class="login-button"
+        >
           Connexion
         </button>
       </div>

@@ -1,0 +1,83 @@
+// Utilise les variables globales de styles.scss
+
+:host {
+    display: flex; // Permet de centrer le contenu verticalement si besoin
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 120px); // Ajustez la hauteur en fonction de la navbar/footer
+    padding: var(--space-5) 0; // Espace vertical
+    background-color: var(--neutral-100); // Fond légèrement différent pour la page auth
+  }
+  
+  .auth-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .auth-card {
+    max-width: 450px; // Largeur maximale de la carte d'authentification
+    width: 100%;
+    padding: var(--space-3) var(--space-4); // Padding interne de la carte
+  
+    .mat-mdc-card-header {
+      padding-bottom: var(--space-4); // Espace sous le titre/sous-titre
+      text-align: center; // Centrer le header
+    }
+  
+    .mat-mdc-card-title {
+      font-family: var(--font-family); // Police élégante pour le titre
+      font-size: 2rem; // Taille du titre
+      color: var(--primary-600); // Couleur primaire
+      margin-bottom: var(--space-1);
+    }
+  
+    .mat-mdc-card-subtitle {
+      color: var(--neutral-600); // Couleur neutre pour le sous-titre
+    }
+  
+    .mat-mdc-card-content {
+      padding-top: var(--space-4); // Espace avant le formulaire
+    }
+  
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2); // Espace entre les champs du formulaire
+    }
+  
+    .mat-mdc-form-field {
+      margin-bottom: var(--space-2); // Ajuster l'espacement par défaut si nécessaire
+    }
+  
+    .submit-button {
+      margin-top: var(--space-3); // Espace avant le bouton de soumission
+      padding: var(--space-2) 0; // Padding vertical pour le bouton
+      min-height: 48px; // Hauteur minimale
+    }
+  
+    .mat-mdc-card-actions {
+      padding: var(--space-4) 0 var(--space-2) 0; // Padding pour les actions (bouton de bascule)
+      border-top: 1px solid var(--neutral-200); // Séparateur léger
+      margin-top: var(--space-4); // Espace avant le séparateur
+    }
+  
+    .toggle-button {
+      color: var(--primary-600);
+      font-weight: 500;
+      text-transform: none; // Ne pas mettre en majuscules
+      font-size: 0.9rem;
+    }
+  }
+  
+  // Ajustements responsives si nécessaire
+  @media (max-width: 576px) {
+    .auth-card {
+      max-width: 90%;
+      padding: var(--space-3);
+    }
+    .mat-mdc-card-title {
+      font-size: 1.75rem;
+    }
+  }
+  
