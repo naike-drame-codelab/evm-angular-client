@@ -1,2 +1,196 @@
-<p>home works!</p>
-<p>Ci-gît mon manque d'inspi 🙃</p>
+<div class="page-wrapper">
+    <app-navbar></app-navbar>
+  
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="hero-gradient-overlay"></div>
+        <div class="container hero-content">
+          <div class="hero-text-container">
+            <h1>Gestion d'événements simplifiée</h1>
+            <p class="hero-subtitle">
+              Planifiez, organisez et gérez vos événements de A à Z avec notre
+              plateforme intuitive et puissante.
+            </p>
+            <div class="hero-actions">
+              <button mat-raised-button color="primary" class="hero-cta-primary" routerLink="/events/create">
+                Créer un événement
+                <mat-icon>arrow_forward</mat-icon>
+              </button>
+              <button mat-stroked-button class="hero-cta-secondary" routerLink="/events">
+                Explorer les événements
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="hero-bottom-fade"></div>
+      </section>
+  
+      <!-- Features Section -->
+      <section class="features-section section-padding bg-light">
+        <div class="container">
+          <h2 class="section-title">Tout ce dont vous avez besoin</h2>
+  
+          <div class="features-grid">
+            <div class="card feature-card">
+              <div class="feature-icon-wrapper icon-bg-primary">
+                <mat-icon class="icon-primary">calendar_today</mat-icon>
+              </div>
+              <h3>Gestion d'événements complète</h3>
+              <p class="text-muted">
+                Créez, modifiez et gérez facilement vos événements. Suivez les
+                inscriptions, les paiements et générez des rapports.
+              </p>
+            </div>
+  
+            <div class="card feature-card">
+              <div class="feature-icon-wrapper icon-bg-accent">
+                <mat-icon class="icon-accent">location_city</mat-icon>
+                <!-- or 'business' -->
+              </div>
+              <h3>Trouvez la salle parfaite</h3>
+              <p class="text-muted">
+                Explorez notre catalogue de salles disponibles et choisissez l'espace idéal pour votre prochain événement.
+              </p>
+            </div>
+  
+            <div class="card feature-card">
+              <div class="feature-icon-wrapper icon-bg-success">
+                <mat-icon class="icon-success">group</mat-icon>
+              </div>
+              <h3>Gestion des participants</h3>
+              <p class="text-muted">
+                Suivez les inscriptions, envoyez des communications et collectez
+                les feedbacks après l'événement.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+  
+      <!-- For Organizers Section -->
+      <section class="organizers-section section-padding bg-lighter">
+        <div class="container">
+          <div class="two-col-layout">
+            <div class="col-content">
+              <h2 class="section-subtitle">Pour les organisateurs</h2>
+              <ul class="checklist">
+                <li>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
+                  <span>Créez et gérez plusieurs événements simultanément</span>
+                </li>
+                <li>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
+                  <span
+                    >Configurez l'agencement des salles de manière
+                    interactive</span
+                  >
+                </li>
+                <li>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
+                  <span
+                    >Gérez la billetterie et suivez les ventes en temps réel</span
+                  >
+                </li>
+                <li>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
+                  <span>Obtenez des estimations de coûts automatiques</span>
+                </li>
+              </ul>
+              <button mat-raised-button color="primary" class="section-cta" routerLink="/auth">
+                Créer un compte organisateur
+              </button>
+            </div>
+            <div class="col-image">
+              <div class="image-card card">
+                <div class="image-placeholder">
+                  <img
+                    src="https://images.unsplash.com/photo-1519750157634-b6d493a0f77c?q=80&w=1200&auto=format&fit=crop"
+                    alt="Event organizer dashboard"
+                    class="responsive-image"
+                  />
+                </div>
+                <div class="image-caption">
+                  Tableau de bord organisateur avec statistiques en temps réel
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+  
+      <!-- For Participants Section -->
+      <section class="participants-section section-padding bg-white">
+        <div class="container">
+          <div class="two-col-layout reverse-layout">
+            <div class="col-content">
+              <h2 class="section-subtitle">Pour les participants</h2>
+              <ul class="checklist">
+                <li>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
+                  <span
+                    >Parcourez et découvrez des événements qui vous
+                    intéressent</span
+                  >
+                </li>
+                <li>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
+                  <span>Achetez vos billets en quelques clics</span>
+                </li>
+                <li>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
+                  <span>Recevez toutes les informations importantes</span>
+                </li>
+                <li>
+                  <mat-icon class="check-icon">check_circle</mat-icon>
+                  <span>Donnez votre avis après l'événement</span>
+                </li>
+              </ul>
+              <button mat-raised-button color="primary" class="section-cta" routerLink="/events">
+                Découvrir les événements
+              </button>
+            </div>
+            <div class="col-image">
+              <div class="image-card card">
+                <div class="image-placeholder">
+                  <img
+                    src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1200&auto=format&fit=crop"
+                    alt="Event participants"
+                    class="responsive-image"
+                  />
+                </div>
+                <div class="image-caption">
+                  Interface intuitive pour découvrir et rejoindre des événements
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+  
+      <!-- CTA Section -->
+      <section class="cta-section section-padding bg-dark text-light">
+        <div class="container text-center">
+          <mat-icon class="cta-icon">event</mat-icon> <!-- or calendar_month -->
+          <h2 class="section-title">
+            Prêt à organiser votre prochain événement ?
+          </h2>
+          <p class="cta-subtitle">
+            Rejoignez VenueHub dès aujourd'hui et transformez votre vision en
+            réalité.
+          </p>
+          <div class="cta-actions">
+            <button mat-raised-button color="primary" class="cta-primary" routerLink="/auth">
+              Créer un compte
+            </button>
+            <button mat-stroked-button class="cta-secondary" routerLink="/contact">
+              Nous contacter
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+  
+    <app-footer></app-footer>
+  </div>
+  

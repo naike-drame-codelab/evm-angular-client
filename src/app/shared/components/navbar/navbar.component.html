@@ -1,0 +1,22 @@
+<nav class="navbar">
+    <div class="container navbar-content">
+      <!-- Logo -->
+      <a routerLink="/" class="navbar-logo">
+        <i class="material-icons">event_seat</i>
+        VenueHub
+    </a>
+  
+      <!-- Navigation Links & Button -->
+      <div class="navbar-links">
+        <ul>
+          <li><a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Accueil</a></li>
+          <li><a routerLink="/events" routerLinkActive="active-link">Événements</a></li>
+          <li><a routerLink="/register" routerLinkActive="active-link">Inscription</a></li>
+        </ul>
+        <button mat-stroked-button color="primary" routerLink="/login" class="login-button">
+          Connexion
+        </button>
+      </div>
+    </div>
+  </nav>
+  

@@ -1,0 +1,32 @@
+// Import global variables if needed
+
+:host {
+    display: block;
+    margin-top: auto; // Pushes footer to bottom if main content is short
+  }
+  
+  .footer {
+    background-color: var(--neutral-900); // Dark background
+    color: var(--neutral-400); // Lighter text color
+    padding: var(--space-4) 0; // Vertical padding
+    border-top: 1px solid var(--neutral-800); // Subtle top border
+  }
+  
+  .footer-content {
+    text-align: center;
+  
+    p {
+      margin-bottom: 0; // Remove default paragraph margin
+      font-size: 0.875rem; // Slightly smaller text
+    }
+  
+    // Styles for potential future links in the footer
+    a {
+      color: var(--neutral-300);
+      &:hover {
+        color: white;
+        text-decoration: underline;
+      }
+    }
+  }
+  
