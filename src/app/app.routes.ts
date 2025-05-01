@@ -10,13 +10,15 @@ import { LayoutComponent } from './presentation/dashboard/client/layout/layout.c
 import { EventFormComponent } from './presentation/events/event-form/event-form.component';
 import { EventDetailsComponent } from './presentation/events/event-details/event-details.component';
 import { CancelPaymentComponent } from './presentation/checkout/cancel-payment/cancel-payment.component';
+import { CheckoutComponent } from './presentation/checkout/checkout/checkout.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   {path: 'home', component: HomeComponent},
   {path: 'auth', component: AuthComponent}, 
   {path: 'not-found', component: NotFoundComponent}, // Page 404
-  { path: 'events/details', component: EventDetailsComponent }, 
+  { path: 'events/:id/details', component: EventDetailsComponent }, 
+  {path: 'events/:id/checkout', component: CheckoutComponent}, // Détails de l'événement
   {path: 'success', component: SuccessPaymentComponent}, // Page de succès de paiement
   {path: 'cancel', component: CancelPaymentComponent}, // Page d'annulation de paiement
 
