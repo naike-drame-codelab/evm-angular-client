@@ -1,0 +1,63 @@
+.cancel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Adjust as needed */
+    padding: 20px;
+  }
+  
+  .cancel-card {
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .cancel-header {
+    justify-content: center; /* Center header content */
+    padding-bottom: 16px;
+  }
+  
+  .cancel-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px; /* Add space below icon */
+    width: 60px; /* Ensure avatar space is consistent */
+    height: 60px;
+  }
+  
+  .cancel-icon {
+    font-size: 48px; /* Make icon larger */
+    width: 48px;
+    height: 48px;
+    color: red; /* Cancellation/Error color */
+  }
+  
+  .cancel-content {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+  
+  .cancel-actions {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Add space between buttons */
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+  }
+  
+  /* Re-use fade-in animation if defined globally, otherwise add it here */
+  .fade-in {
+    animation: fadeInAnimation ease 0.5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+  
+  @keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+  }

@@ -1,0 +1,65 @@
+/* c:\Users\user\source\repos\naike-drame-codelab\Labo final\evm-angular\src\app\presentation\checkout\success-payment\success-payment.component.scss */
+.success-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh; /* Adjust as needed */
+    padding: 20px;
+  }
+  
+  .success-card {
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .success-header {
+    justify-content: center; /* Center header content */
+    padding-bottom: 16px;
+  }
+  
+  .success-icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px; /* Add space below icon */
+    width: 60px; /* Ensure avatar space is consistent */
+    height: 60px;
+  }
+  
+  .success-icon {
+    font-size: 48px; /* Make icon larger */
+    width: 48px;
+    height: 48px;
+    color: green; /* Success color */
+  }
+  
+  .success-content {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+  
+  .success-actions {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Add space between buttons */
+    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+  }
+  
+  /* Basic fade-in animation (if not defined globally) */
+  .fade-in {
+    animation: fadeInAnimation ease 0.5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+  
+  @keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+  }
+  

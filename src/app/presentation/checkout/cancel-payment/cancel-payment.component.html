@@ -1,0 +1,27 @@
+<div class="cancel-container fade-in">
+  <mat-card class="cancel-card">
+    <mat-card-header class="cancel-header">
+      <div mat-card-avatar class="cancel-icon-container">
+        <mat-icon class="cancel-icon">cancel</mat-icon> <!-- Ou 'error' -->
+      </div>
+      <mat-card-title>Paiement Annulé</mat-card-title>
+      <mat-card-subtitle>Votre transaction n'a pas été complétée.</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="cancel-content">
+      <p>Le processus de paiement a été annulé ou a échoué.</p>
+      <p>Aucun frais n'a été appliqué à votre compte.</p>
+      <p>Si vous pensez qu'il s'agit d'une erreur, veuillez réessayer ou contacter le support.</p>
+      <!-- Optionnel: Afficher des détails si disponibles -->
+      <!--
+      <mat-divider></mat-divider>
+      <p>Raison : {{ cancellationReason }}</p>
+      -->
+    </mat-card-content>
+
+    <mat-card-actions class="cancel-actions">
+      <button mat-raised-button color="primary" routerLink="/events">Retourner aux événements</button>
+      <button mat-stroked-button color="warn" routerLink="/checkout">Réessayer le paiement</button> <!-- Mettez le bon chemin vers le panier/checkout -->
+    </mat-card-actions>
+  </mat-card>
+</div>

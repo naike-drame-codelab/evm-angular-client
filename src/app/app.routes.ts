@@ -5,14 +5,21 @@ import { EventListComponent } from './presentation/events/event-list/event-list.
 import { RoomGridComponent } from './presentation/rooms/room-grid/room-grid.component';
 import { AuthComponent } from './presentation/auth/auth/auth.component';
 import { NotFoundComponent } from './presentation/not-found/not-found/not-found.component';
+import { SuccessPaymentComponent } from './presentation/checkout/success-payment/success-payment.component';
 import { LayoutComponent } from './presentation/dashboard/client/layout/layout.component';
 import { EventFormComponent } from './presentation/events/event-form/event-form.component';
+import { EventDetailsComponent } from './presentation/events/event-details/event-details.component';
+import { CancelPaymentComponent } from './presentation/checkout/cancel-payment/cancel-payment.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   {path: 'home', component: HomeComponent},
   {path: 'auth', component: AuthComponent}, 
   {path: 'not-found', component: NotFoundComponent}, // Page 404
+  { path: 'events/details', component: EventDetailsComponent }, 
+  {path: 'success', component: SuccessPaymentComponent}, // Page de succès de paiement
+  {path: 'cancel', component: CancelPaymentComponent}, // Page d'annulation de paiement
+
   // Autres routes
   {
     path: 'client',

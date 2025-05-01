@@ -1,0 +1,29 @@
+<div class="success-container fade-in">
+  <mat-card class="success-card">
+    <mat-card-header class="success-header">
+      <div mat-card-avatar class="success-icon-container">
+        <mat-icon class="success-icon">check_circle</mat-icon>
+      </div>
+      <mat-card-title>Paiement Réussi !</mat-card-title>
+      <mat-card-subtitle>Votre achat de billets a été confirmé.</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="success-content">
+      <p>Merci pour votre achat ! Vos billets ont été traités avec succès.</p>
+      <p>Un e-mail de confirmation avec les détails de votre commande et vos billets électroniques vous sera envoyé sous peu.</p>
+      <!-- Optionnel: Afficher un résumé de la commande si les données sont disponibles -->
+      <!--
+      <mat-divider></mat-divider>
+      <h4>Résumé de la commande :</h4>
+      <p>Événement : {{ eventName }}</p>
+      <p>Nombre de billets : {{ numberOfTickets }}</p>
+      <p>Montant total : {{ totalAmount | currency:'CAD':'symbol' }}</p>
+      -->
+    </mat-card-content>
+
+    <mat-card-actions class="success-actions">
+      <button mat-raised-button color="primary" routerLink="/events">Retourner aux événements</button>
+      <button mat-stroked-button color="accent" routerLink="/my-tickets">Voir mes billets</button> <!-- Mettez le bon chemin -->
+    </mat-card-actions>
+  </mat-card>
+</div>
