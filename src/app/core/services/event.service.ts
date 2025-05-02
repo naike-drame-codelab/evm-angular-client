@@ -261,4 +261,16 @@ export class EventService {
 //     return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() })
 //       .pipe(catchError(this.handleError));
 //   }
+
+// getRooms(): Observable<any[]> {
+//   return this.http.get<any[]>(`${environment.apiUrl}/rooms`);
+// }
+
+// getMaterials(): Observable<any[]> {
+//   return this.http.get<any[]>(`${environment.apiUrl}/materials`);
+// }
+
+// getCaterings(): Observable<any[]> {
+//   return this.http.get<any[]>(`${environment.apiUrl}/caterings`);
+// }
 // }

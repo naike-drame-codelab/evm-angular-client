@@ -118,6 +118,89 @@ export class EventFormComponent {
     //     this.isSubmitting = false;
     //   }
     // });
+
+//     import { Component, OnInit } from '@angular/core';
+// import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
+// import { EventService } from './event.service';
+
+// @Component({
+//   selector: 'app-create-event',
+//   templateUrl: './create-event.component.html',
+// })
+// export class CreateEventComponent implements OnInit {
+//   eventForm: FormGroup;
+//   rooms: any[] = [];
+//   materials: any[] = [];
+//   caterings: any[] = [];
+
+//   constructor(private fb: FormBuilder, private eventService: EventService) {
+//     this.eventForm = this.fb.group({
+//       name: ['', Validators.required],
+//       startDate: ['', Validators.required],
+//       endDate: ['', Validators.required],
+//       roomId: ['', Validators.required],
+//       materialOptions: this.fb.array([]),
+//       cateringOptions: this.fb.array([]),
+//     });
+//   }
+
+//   ngOnInit(): void {
+//     this.loadRooms();
+//     this.loadMaterials();
+//     this.loadCaterings();
+//   }
+
+//   loadRooms(): void {
+//     this.eventService.getRooms().subscribe((data) => {
+//       this.rooms = data;
+//     });
+//   }
+
+//   loadMaterials(): void {
+//     this.eventService.getMaterials().subscribe((data) => {
+//       this.materials = data;
+//       this.initializeMaterialOptions();
+//     });
+//   }
+
+//   loadCaterings(): void {
+//     this.eventService.getCaterings().subscribe((data) => {
+//       this.caterings = data;
+//       this.initializeCateringOptions();
+//     });
+//   }
+
+//   initializeMaterialOptions(): void {
+//     const materialArray = this.eventForm.get('materialOptions') as FormArray;
+//     this.materials.forEach(() => materialArray.push(new FormControl(false)));
+//   }
+
+//   initializeCateringOptions(): void {
+//     const cateringArray = this.eventForm.get('cateringOptions') as FormArray;
+//     this.caterings.forEach(() => cateringArray.push(new FormControl(false)));
+//   }
+
+//   onSubmit(): void {
+//     if (this.eventForm.valid) {
+//       const selectedMaterials = this.eventForm.value.materialOptions
+//         .map((checked: boolean, i: number) => (checked ? this.materials[i] : null))
+//         .filter((v: any) => v !== null);
+
+//       const selectedCaterings = this.eventForm.value.cateringOptions
+//         .map((checked: boolean, i: number) => (checked ? this.caterings[i] : null))
+//         .filter((v: any) => v !== null);
+
+//       const eventData = {
+//         ...this.eventForm.value,
+//         materialOptions: selectedMaterials,
+//         cateringOptions: selectedCaterings,
+//       };
+
+//       console.log('Event Data:', eventData);
+//     }
+//   }
+// }
+
   }
 
   onCancel(): void {

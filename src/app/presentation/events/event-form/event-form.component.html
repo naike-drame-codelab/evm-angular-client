@@ -133,3 +133,45 @@
     </div>
   </div>
   
+  <!-- <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="name">Event Name:</label>
+    <input id="name" formControlName="name" />
+  </div>
+
+  <div>
+    <label for="startDate">Start Date:</label>
+    <input id="startDate" type="datetime-local" formControlName="startDate" />
+  </div>
+
+  <div>
+    <label for="endDate">End Date:</label>
+    <input id="endDate" type="datetime-local" formControlName="endDate" />
+  </div>
+
+  <div>
+    <label for="roomId">Select Room:</label>
+    <select id="roomId" formControlName="roomId">
+      <option *ngFor="let room of rooms" [value]="room.id">{{ room.name }}</option>
+    </select>
+  </div>
+
+  <div formArrayName="materialOptions">
+    <label>Material Options:</label>
+    <div *ngFor="let material of materials; let i = index">
+      <input type="checkbox" [formControlName]="i" />
+      {{ material.name }} ({{ material.pricePerUnit }} per unit)
+    </div>
+  </div>
+
+  <div formArrayName="cateringOptions">
+    <label>Catering Options:</label>
+    <div *ngFor="let catering of caterings; let i = index">
+      <input type="checkbox" [formControlName]="i" />
+      {{ catering.name }} ({{ catering.pricePerPerson }} per person)
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="eventForm.invalid">Create Event</button>
+</form>
+ -->
