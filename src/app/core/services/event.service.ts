@@ -274,3 +274,36 @@ export class EventService {
 //   return this.http.get<any[]>(`${environment.apiUrl}/caterings`);
 // }
 // }
+
+/*
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class EventService {
+  private baseUrl = 'api'; // Adjust the base URL as needed
+
+  constructor(private http: HttpClient) {}
+
+  getRooms(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/rooms`);
+  }
+
+  getMaterials(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/materials`);
+  }
+
+  getCaterings(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/caterings`);
+  }
+
+  createEvent(eventData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/events`, eventData);
+  }
+}
+
+
+*/
