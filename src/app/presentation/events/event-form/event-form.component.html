@@ -175,3 +175,104 @@
   <button type="submit" [disabled]="eventForm.invalid">Create Event</button>
 </form>
  -->
+
+ <!--  <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+      <div>
+        <label for="name">Event Name</label>
+        <input id="name" formControlName="name" />
+      </div>
+
+      <div>
+        <label for="clientId">Client ID</label>
+        <input id="clientId" formControlName="clientId" type="number" />
+      </div>
+
+      <div>
+        <label for="startDate">Start Date</label>
+        <input id="startDate" formControlName="startDate" type="datetime-local" />
+      </div>
+
+      <div>
+        <label for="endDate">End Date</label>
+        <input id="endDate" formControlName="endDate" type="datetime-local" />
+      </div>
+
+      <div>
+        <label for="type">Event Type</label>
+        <select id="type" formControlName="type">
+          <option value="Conference">Conference</option>
+          <option value="Corporate">Corporate</option>
+          <option value="Wedding">Wedding</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="status">Event Status</label>
+        <select id="status" formControlName="status">
+          <option value="0">Pending</option>
+          <option value="1">Confirmed</option>
+          <option value="2">Cancelled</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="description">Description</label>
+        <textarea id="description" formControlName="description"></textarea>
+      </div>
+
+      <div>
+        <label for="imageUrl">Image URL</label>
+        <input id="imageUrl" formControlName="imageUrl" />
+      </div>
+
+      <div>
+        <label>Room Reservations</label>
+        <div *ngFor="let room of rooms">
+          <input
+            type="checkbox"
+            [value]="room.id"
+            (change)="onRoomSelectionChange($event)"
+          />
+          {{ room.name }}
+        </div>
+      </div>
+
+      <div>
+        <label>Material Options</label>
+        <div *ngFor="let material of materials">
+          <input
+            type="checkbox"
+            [value]="material.id"
+            (change)="onMaterialSelectionChange($event, material)"
+          />
+          {{ material.name }}
+          <input
+            *ngIf="selectedMaterials.includes(material.id)"
+            type="number"
+            placeholder="Quantity"
+            (input)="onMaterialQuantityChange(material.id, $event.target.value)"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label>Catering Options</label>
+        <div *ngFor="let catering of caterings">
+          <input
+            type="checkbox"
+            [value]="catering.id"
+            (change)="onCateringSelectionChange($event, catering)"
+          />
+          {{ catering.name }}
+          <input
+            *ngIf="selectedCaterings.includes(catering.id)"
+            type="number"
+            placeholder="Number of People"
+            (input)="onCateringPeopleChange(catering.id, $event.target.value)"
+          />
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="eventForm.invalid">Create Event</button>
+    </form>
+-->

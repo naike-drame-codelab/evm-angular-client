@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { Event, EventStatus, EventType } from '../models/event.model';
+import { environment } from '../../../environments/environment.development';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -87,38 +89,39 @@ export class EventService {
     }
   ];
 
-  constructor() { }
+  httpClient = inject(HttpClient);
+  // constructor() { }
 
-  getEvents(): Observable<Event[]> {
-    return of(this.mockEvents).pipe(delay(500));
-  }
+  // getEvents(): Observable<Event[]> {
+  //   return of(this.mockEvents).pipe(delay(500));
+  // }
 
-  getEventById(id: string): Observable<Event | undefined> {
-    const event = this.mockEvents.find(e => e.id === id);
-    return of(event).pipe(delay(300));
-  }
+  // getEventById(id: string): Observable<Event | undefined> {
+  //   const event = this.mockEvents.find(e => e.id === id);
+  //   return of(event).pipe(delay(300));
+  // }
 
-  getUpcomingEvents(limit: number = 5): Observable<Event[]> {
-    const now = new Date();
-    const upcoming = this.mockEvents
-      .filter(event => event.startDate > now)
-      .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
-      .slice(0, limit);
+  // getUpcomingEvents(limit: number = 5): Observable<Event[]> {
+  //   const now = new Date();
+  //   const upcoming = this.mockEvents
+  //     .filter(event => event.startDate > now)
+  //     .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+  //     .slice(0, limit);
     
-    return of(upcoming).pipe(delay(500));
-  }
+  //   return of(upcoming).pipe(delay(500));
+  // }
 
-  createEvent(event: Omit<Event, 'id' | 'createdAt' | 'updatedAt'>): Observable<Event> {
-    const newEvent: Event = {
-      ...event,
-      id: (this.mockEvents.length + 1).toString(),
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+  // createEvent(event: Omit<Event, 'id' | 'createdAt' | 'updatedAt'>): Observable<Event> {
+  //   const newEvent: Event = {
+  //     ...event,
+  //     id: (this.mockEvents.length + 1).toString(),
+  //     createdAt: new Date(),
+  //     updatedAt: new Date()
+  //   };
     
-    this.mockEvents.push(newEvent);
-    return of(newEvent).pipe(delay(500));
-  }
+  //   this.mockEvents.push(newEvent);
+  //   return of(newEvent).pipe(delay(500));
+  // }
 
   updateEvent(event: Event): Observable<Event> {
     const index = this.mockEvents.findIndex(e => e.id === event.id);
@@ -139,6 +142,22 @@ export class EventService {
       return of(true).pipe(delay(500));
     }
     return of(false).pipe(delay(500));
+  }
+
+  getRooms(): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${environment.apiUrl}/rooms`).pipe(delay(500));
+  }
+
+  getMaterials(): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${environment.apiUrl}/materials`).pipe(delay(500));
+  }
+
+  getCaterings(): Observable<any[]> {
+    return this.httpClient.get<any[]>(`${environment.apiUrl}/caterings`).pipe(delay(500));
+  }
+
+  createEvent(eventData: any): Observable<any> {
+    return this.httpClient.post(`${environment.apiUrl}/events`, eventData).pipe(delay(500));
   }
 
   getEventsByRoom(roomId: string): Observable<Event[]> {
@@ -288,21 +307,7 @@ export class EventService {
 
   constructor(private http: HttpClient) {}
 
-  getRooms(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/rooms`);
-  }
 
-  getMaterials(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/materials`);
-  }
-
-  getCaterings(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/caterings`);
-  }
-
-  createEvent(eventData: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/events`, eventData);
-  }
 }
 
 
