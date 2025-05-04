@@ -1,2 +1,57 @@
-<p>event-details works!</p>
-<button (click)="payForTickets()">Pay for Tickets</button>
+
+<app-navbar></app-navbar>
+<div class="details-container">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-spinner">
+      <mat-spinner diameter="60"></mat-spinner>
+      <p>Loading event details...</p>
+    </div>
+  
+    <!-- Event Not Found State -->
+    <div *ngIf="!loading && !event" class="not-found">
+      <h2>Event Not Found</h2>
+      <p>Sorry, we couldn't find the event you're looking for.</p>
+      <button mat-stroked-button routerLink="/public-events">
+        <mat-icon>arrow_back</mat-icon> Back to Events
+      </button>
+    </div>
+  
+    <!-- Event Found State -->
+    <mat-card *ngIf="!loading && event" class="event-details-card">
+      <mat-card-header>
+        <mat-card-title>{{ event.name }}</mat-card-title>
+        <mat-card-subtitle>Organized by {{ 'Event Team' }}</mat-card-subtitle>
+      </mat-card-header>
+  
+      <!-- Optional Image Area -->
+      <!-- <img mat-card-image [src]="event.imageUrl || 'default-event-image.jpg'" alt="Photo of {{ event.title }}"> -->
+  
+      <mat-card-content>
+        <div class="event-meta">
+          <div class="meta-item">
+            <mat-icon>calendar_today</mat-icon>
+            <span>{{ event.startDate | formatDate }}</span>
+          </div>
+          <div class="meta-item">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ event.startDate | formatTime }} - {{ event.endDate | formatTime }}</span>
+          </div>
+          <div class="meta-item">
+            <mat-icon>location_on</mat-icon>
+            <span>{{ "VenueHub" }}</span>
+          </div>
+        </div>
+  
+        <p class="event-description">{{ event.description }}</p>
+      </mat-card-content>
+  
+      <mat-card-actions class="details-actions">
+        <button mat-raised-button color="accent" class="purchase-button" [routerLink]="['/events', event.id, 'checkout']">
+          <mat-icon>shopping_cart</mat-icon> Purchase Ticket
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <button (click)="payForTickets()">Pay for Tickets</button>
+    <app-footer></app-footer>
+  </div>
+  

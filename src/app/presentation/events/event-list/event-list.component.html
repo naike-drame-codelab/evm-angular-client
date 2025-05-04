@@ -73,12 +73,12 @@
           <tbody>
             <tr *ngFor="let event of filteredEvents" class="fade-in">
               <td class="event-title">
-                <a [routerLink]="['/events', event.id]">{{ event.title }}</a>
+                <a [routerLink]="['/events', event.id]">{{ event.name }}</a>
               </td>
               <td>{{ event.startDate | formatDate }}</td>
               <td>{{ event.startDate | formatTime }} - {{ event.endDate | formatTime }}</td>
               <td>{{ event.type | titlecase }}</td>
-              <td>{{ event.attendees }}</td>
+              <!-- <td>{{ event.attendees }}</td> -->
               <td>
                 <span [class]="getEventStatusClass(event.status)">
                   {{ event.status | titlecase }}

@@ -51,7 +51,7 @@ export class EventListComponent implements OnInit {
     if (this.searchTerm.trim()) {
       const term = this.searchTerm.toLowerCase();
       result = result.filter(event =>
-        event.title.toLowerCase().includes(term) ||
+        event.name.toLowerCase().includes(term) ||
         event.description.toLowerCase().includes(term)
       );
     }
@@ -68,7 +68,7 @@ export class EventListComponent implements OnInit {
       if (this.sortBy === 'date') {
         comparison = new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
       } else if (this.sortBy === 'title') {
-        comparison = a.title.localeCompare(b.title);
+        comparison = a.name.localeCompare(b.name);
       } else if (this.sortBy === 'status') {
         comparison = a.status.localeCompare(b.status);
       }

@@ -1,0 +1,32 @@
+<app-navbar></app-navbar>
+<div class="event-list-container">
+    <h1>Liste des événements</h1>
+  
+    <div *ngIf="loading" class="loading-spinner">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Loading events...</p>
+    </div>
+  
+    <div *ngIf="!loading && events.length === 0" class="no-events">
+      <p>No upcoming events found.</p>
+    </div>
+  
+    <div class="event-grid" *ngIf="!loading && events.length > 0">
+      <mat-card *ngFor="let event of events" class="event-card">
+        <mat-card-header>
+          <mat-card-title>{{ event.name }}</mat-card-title>
+          <mat-card-subtitle>
+            {{ event.startDate | formatDate }} at {{ event.startDate | formatTime }}
+          </mat-card-subtitle>
+        </mat-card-header>
+        <!-- Optional: Add an image -->
+        <!-- <img mat-card-image [src]="event.imageUrl || 'default-event-image.jpg'" alt="Photo of {{ event.title }}"> -->
+        <mat-card-content>
+          <p class="event-description">{{ event.description | slice:0:150 }}{{ event.description.length > 150 ? '...' : '' }}</p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" [routerLink]="['/events', event.id, 'details']">View Details</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>

@@ -67,17 +67,17 @@ export class OverviewComponent implements OnInit {
   }
 
   loadMetrics(): void {
-    this.loading.metrics = true;
-    this.analyticsService.getVenueMetrics().subscribe({
-      next: (metrics) => {
-        this.metrics = metrics;
-        this.loading.metrics = false;
-      },
-      error: (error) => {
-        console.error('Error loading metrics', error);
-        this.loading.metrics = false;
-      }
-    });
+    // this.loading.metrics = true;
+    // this.analyticsService.getVenueMetrics().subscribe({
+    //   next: (metrics) => {
+    //     this.metrics = metrics;
+    //     this.loading.metrics = false;
+    //   },
+    //   error: (error) => {
+    //     console.error('Error loading metrics', error);
+    //     this.loading.metrics = false;
+    //   }
+    //});
   }
 
   getEventStatusClass(status: string): string {

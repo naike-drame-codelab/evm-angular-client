@@ -1,183 +1,65 @@
-.event-form-container {
-  .page-header {
-    // Use existing page header styles if available
-    background-color: rgba(purple, 0.2); // Example
-    color: white;
-    padding: 2rem 0;
-    margin-bottom: 2rem;
+@use '@angular/material' as mat;
 
-    h1 {
-      margin-bottom: 0.5rem;
-    }
+.form-container {
+  max-width: 800px; // Limit form width for better readability
+  margin: 2rem auto; // Center the form on the page
+  padding: 1rem; // Add some padding around the card
 
-  }
-
-  .container {
-    max-width: 800px; // Adjust as needed
-    margin: 0 auto;
-    padding: 0 1rem;
-  }
-
-  .form-card {
-    padding: 2rem;
+  // Target the mat-card inside the container
+  mat-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); // Add a subtle box shadow
+    border-radius: 8px; // Optional: Slightly round the corners
     background-color: #fff;
   }
+}
 
-  .form-group {
-    margin-bottom: 1.5rem;
+mat-card-header {
+  padding-bottom: 1rem; // Add space below the header
+  border-bottom: 1px solid var(--divider-color); // Use theme divider color
+  margin-bottom: 1.5rem;
+}
 
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  gap: 1rem;
+  color: var(--text-secondary);
+}
 
-      .required {
-        color: red;
-        margin-left: 0.25rem;
-      }
-    }
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; // Add vertical space between form fields
+}
 
-    input[type="text"],
-    input[type="date"],
-    input[type="time"],
-    input[type="number"],
-    textarea,
-    select {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid darkgrey;
-      font-size: 1rem;
-      box-sizing: border-box; // Important for width calculation
+// Ensure full width for form fields by default
+mat-form-field {
+  width: 100%;
+}
 
-      &:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px rgba(purple, 0.2);
-      }
-    }
-
-    textarea {
-      resize: vertical; // Allow vertical resizing
-      min-height: 80px;
-    }
-  }
-
-  .form-row {
-    display: flex;
-    gap: 1.5rem; // Space between columns
-
-    .half-width {
-      flex: 1; // Each takes half the space
-    }
-  }
-
-  .validation-error {
-    margin-top: 0.5rem;
-    small {
-      color: red;
-      font-size: 0.85rem;
-    }
-  }
-
-  .form-wide-error {
-    margin-top: -0.5rem; // Adjust spacing if needed
-    margin-bottom: 1.5rem;
-    padding: 0.5rem;
-    background-color: lighten(red, 35%);
-    border: 1px solid lighten(red, 20%);
-    small {
-        color: darken(red, 10%);
-    }
-  }
+// Style the datepicker calendar background
+// Use ::ng-deep carefully as it pierces view encapsulation
+::ng-deep .mat-datepicker-content .mat-calendar {
+  background-color: #ffffff; 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
 
 
-  .alert {
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    border: 1px solid transparent;
+// Layout for side-by-side fields
+.date-range,
+.ticket-info {
+  display: flex;
+  gap: 1rem; // Space between the fields
+  flex-wrap: wrap; // Allow wrapping on smaller screens
 
-    &.alert-error {
-      background-color: lighten(red, 35%);
-      border-color: lighten(red, 20%);
-      color: darken(red, 10%);
-    }
-  }
-
-  .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid lightgrey;
-
-    button {
-      
-      padding: 0.75rem 1.5rem;
-
-      &.btn-primary {
-        background-color: #fff;
-        color: purple;
-        border: 1px solid purple; // Example mixin
-      }
-
-      &.btn-secondary {
-         // Or specific styles for secondary
-         background-color: lightgrey;
-         color: black;
-         border: 1px solid darkgrey;
-
-         &:hover {
-            background-color: darken(lightgrey, 5%);
-         }
-      }
-
-      &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-
-      .loading-spinner.small {
-         // Add styles for a small loading spinner if you have one
-         // Example:
-         display: inline-block;
-         border: 2px solid rgba(255, 255, 255, 0.3);
-         border-radius: 50%;
-         border-top-color: #fff;
-         width: 1em;
-         height: 1em;
-         animation: spin 1s linear infinite;
-         margin-right: 0.5em;
-         vertical-align: middle;
-      }
-    }
+  mat-form-field {
+    flex: 1 1 calc(50% - 0.5rem); // Allow fields to take up half the space minus gap
+    min-width: 200px; // Ensure fields don't get too small
   }
 }
 
-// Keyframes for spinner animation (if needed)
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-// --- Responsive adjustments (example) ---
-@media (max-width: 768px) {
-  .event-form-container .form-row {
-    flex-direction: column;
-    gap: 0; // Remove gap when stacked
-
-    .half-width {
-        margin-bottom: 1.5rem; // Add margin back when stacked
-        &:last-child {
-            margin-bottom: 0; // Remove margin from last item in the original row
-        }
-    }
-  }
-
-  .event-form-container .form-actions {
-    flex-direction: column-reverse; // Stack buttons on small screens
-    gap: 0.75rem;
-
-    button {
-        width: 100%; // Make buttons full width
-    }
-  }
+mat-card-actions {
+  margin-top: 1.5rem; // Add space above the action buttons
 }

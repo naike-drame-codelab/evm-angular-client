@@ -1,76 +1,53 @@
+// Define nested DTO interfaces first
+export interface RoomReservationDTO {
+  roomId: string; // Assuming RoomId is a string/Guid in your backend DTO
+  roomName?: string; // Optional: Add other relevant fields if needed
+  // Add other properties from your backend RoomReservationDTO
+}
+
+export interface MaterialOptionDTO {
+  materialId: string; // Assuming MaterialId is a string/Guid
+  materialName?: string; // Optional
+  quantity: number;
+  // Add other properties from your backend MaterialOptionDTO
+}
+
+export interface CateringOptionDTO {
+  cateringId: string; // Assuming CateringId is a string/Guid
+  cateringName?: string; // Optional
+  numberOfPeople: number;
+  // Add other properties from your backend CateringOptionDTO
+}
+
+// Define EventType and EventStatus enums (if not already defined elsewhere)
+// Ensure these match the values used in your backend
+export enum EventStatus {
+  Upcoming = 'Upcoming',
+  Ongoing = 'Ongoing',
+  Completed = 'Completed',
+  Cancelled = 'Cancelled'
+}
+
+export enum EventType {
+  Concert = 'Concert',
+  Conference = 'Conference',
+  Corporate = 'Corporate',
+  Exhibition = 'Exhibition',
+  Tournament = 'Tournament',
+  Other = 'Other'
+}
+
 export interface Event {
-    id: string;
-    title: string;
-    description: string;
-    startDate: Date;
-    endDate: Date;
-    roomId: string;
-    clientId: string;
-    status: EventStatus;
-    attendees: number;
-    type: EventType;
-    amenities: string[];
-    notes?: string;
-    createdAt: Date;
-    updatedAt: Date;
-  }
-  
-  export enum EventStatus {
-    PENDING = 'pending',
-    CONFIRMED = 'confirmed',
-    CANCELLED = 'cancelled',
-    COMPLETED = 'completed'
-  }
-  
-  export enum EventType {
-    WEDDING = 'wedding',
-    CORPORATE = 'corporate',
-    CONFERENCE = 'conference',
-    PARTY = 'party',
-    MEETING = 'meeting',
-    OTHER = 'other'
-  }
-
-  // src/app/core/models/event.model.ts
-
-export interface EventDto {
-  id: number;
-  name: string;
+  id: string; // Changed from Guid to string for frontend consistency
+  name: string; // Changed from title
+  startDate: Date | string; // Keep as Date or string, handle conversion
+  endDate: Date | string;
+  type: EventType;
+  status: EventStatus;
   description: string;
-  startDate: Date;
-  endDate: Date;
-  location: string;
-  organizerId: string; // Assuming GUID stored as string
-  organizerName: string;
-  venueId: number;
-  venueName: string;
-  capacity: number;
-  ticketsSold: number;
-  ticketPrice: number;
-  status: string; // Consider using an enum if you have defined statuses
-}
-
-export interface CreateEventDto {
-  name: string;
-  description: string;
-  startDate: Date;
-  endDate: Date;
-  location: string;
-  venueId: number;
-  capacity: number;
-  ticketPrice: number;
-  status: string;
-  // organizerId is likely set on the backend based on the authenticated user
-}
-
-export interface UpdateEventDto {
-  name: string;
-  description: string;
-  startDate: Date;
-  endDate: Date;
-  location: string;
-  venueId: number;
-  capacity: number;
-  ticketPrice: number;
-  status: string;
+  imageUrl?: string;
+  roomReservations: RoomReservationDTO[];
+  materialOptions?: MaterialOptionDTO[];
+  cateringOptions?: CateringOptionDTO[];
+  // Removed: roomId, clientId, attendees, amenities, notes, createdAt, updatedAt (unless they are part of EventDetailsDTO)
 }

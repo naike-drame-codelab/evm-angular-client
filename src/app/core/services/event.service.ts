@@ -1,115 +1,87 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import { Event, EventStatus, EventType } from '../models/event.model';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, delay } from 'rxjs/operators'; import { Event, EventStatus, EventType, RoomReservationDTO, MaterialOptionDTO, CateringOptionDTO } from '../models/event.model'; // Import new types
 import { environment } from '../../../environments/environment.development';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { EventCreateDTO } from '../models/event-create.model'; 
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventService {
-  private mockEvents: Event[] = [
-    {
-      id: '1',
-      title: 'Annual Corporate Gala',
-      description: 'Annual celebration for XYZ Corporation',
-      startDate: new Date(2025, 0, 15, 18, 0), // Jan 15, 2025, 6:00 PM
-      endDate: new Date(2025, 0, 15, 23, 0), // Jan 15, 2025, 11:00 PM
-      roomId: '1',
-      clientId: '1',
-      status: EventStatus.CONFIRMED,
-      attendees: 150,
-      type: EventType.CORPORATE,
-      amenities: ['Catering', 'AV Equipment', 'Bar Service'],
-      notes: 'Client requested vegetarian options',
-      createdAt: new Date(2024, 9, 10), // Oct 10, 2024
-      updatedAt: new Date(2024, 9, 10)
-    },
-    {
-      id: '2',
-      title: 'Smith-Johnson Wedding',
-      description: 'Wedding ceremony and reception',
-      startDate: new Date(2025, 1, 14, 16, 0), // Feb 14, 2025, 4:00 PM
-      endDate: new Date(2025, 1, 14, 23, 0), // Feb 14, 2025, 11:00 PM
-      roomId: '2',
-      clientId: '2',
-      status: EventStatus.CONFIRMED,
-      attendees: 200,
-      type: EventType.WEDDING,
-      amenities: ['Catering', 'DJ Booth', 'Decoration Package', 'Bar Service'],
-      notes: 'Bride allergic to lilies',
-      createdAt: new Date(2024, 8, 5), // Sep 5, 2024
-      updatedAt: new Date(2024, 9, 1) // Oct 1, 2024
-    },
-    {
-      id: '3',
-      title: 'Tech Conference 2025',
-      description: 'Annual technology conference with keynote speakers',
-      startDate: new Date(2025, 2, 10, 9, 0), // Mar 10, 2025, 9:00 AM
-      endDate: new Date(2025, 2, 12, 17, 0), // Mar 12, 2025, 5:00 PM
-      roomId: '3',
-      clientId: '3',
-      status: EventStatus.PENDING,
-      attendees: 300,
-      type: EventType.CONFERENCE,
-      amenities: ['Catering', 'AV Equipment', 'Wi-Fi', 'Registration Desk'],
-      createdAt: new Date(2024, 9, 5), // Oct 5, 2024
-      updatedAt: new Date(2024, 9, 5)
-    },
-    {
-      id: '4',
-      title: 'Product Launch',
-      description: 'New product line launch for Media Inc.',
-      startDate: new Date(2025, 0, 20, 10, 0), // Jan 20, 2025, 10:00 AM
-      endDate: new Date(2025, 0, 20, 14, 0), // Jan 20, 2025, 2:00 PM
-      roomId: '4',
-      clientId: '4',
-      status: EventStatus.CONFIRMED,
-      attendees: 75,
-      type: EventType.CORPORATE,
-      amenities: ['Catering', 'AV Equipment', 'Product Display Area'],
-      createdAt: new Date(2024, 9, 8), // Oct 8, 2024
-      updatedAt: new Date(2024, 9, 8)
-    },
-    {
-      id: '5',
-      title: 'Quarterly Board Meeting',
-      description: 'Q1 2025 Board Meeting for Global Finance',
-      startDate: new Date(2025, 0, 5, 9, 0), // Jan 5, 2025, 9:00 AM
-      endDate: new Date(2025, 0, 5, 12, 0), // Jan 5, 2025, 12:00 PM
-      roomId: '5',
-      clientId: '5',
-      status: EventStatus.CONFIRMED,
-      attendees: 12,
-      type: EventType.MEETING,
-      amenities: ['Catering', 'AV Equipment', 'Whiteboard'],
-      createdAt: new Date(2024, 8, 15), // Sep 15, 2024
-      updatedAt: new Date(2024, 8, 15)
-    }
-  ];
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    console.error('An error occurred:', error.message);
+    return throwError(() => new Error('Something went wrong. Please try again later.'));
+  }
+  // Mock data can be removed or updated to match the new Event structure if needed for testing
+  // private mockEvents: Event[] = [ ... ];
 
   httpClient = inject(HttpClient);
-  // constructor() { }
+  constructor() { }
 
-  // getEvents(): Observable<Event[]> {
-  //   return of(this.mockEvents).pipe(delay(500));
-  // }
+  /**
+   * Fetches events from the API.
+   * @param includeDetails Optional flag to include detailed information (e.g., room reservations).
+   *                       Defaults to false.
+   */
+  getEvents(includeDetails: boolean = false): Observable<Event[]> {
+    // If using mock data: return of(this.mockEvents).pipe(delay(500));
+    const url = includeDetails
+      ? `${environment.apiUrl}/event?includeDetails=true`
+      : `${environment.apiUrl}/event`;
+    return this.httpClient.get<Event[]>(url).pipe(
+      catchError(this.handleError) // Add error handling
+    );
+  }
 
-  // getEventById(id: string): Observable<Event | undefined> {
-  //   const event = this.mockEvents.find(e => e.id === id);
-  //   return of(event).pipe(delay(300));
-  // }
+  getEventById(id: string): Observable<Event | undefined> { // Use Event type
+    // const event = this.mockEvents.find(e => e.id === id);
+    // return of(event).pipe(delay(300));
+    return this.httpClient.get<Event>(`${environment.apiUrl}/event/${id}`).pipe( // Use Event type
+      catchError(this.handleError) // Add error handling
+    );
+  }
 
-  // getUpcomingEvents(limit: number = 5): Observable<Event[]> {
-  //   const now = new Date();
-  //   const upcoming = this.mockEvents
-  //     .filter(event => event.startDate > now)
-  //     .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
-  //     .slice(0, limit);
+  getUpcomingEvents(limit: number = 5): Observable<Event[]> { // Use Event[] type
+    // const now = new Date();
+    // const upcoming = this.mockEvents
+    //   .filter(event => event.startDate > now)
+    //   .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+    //   .slice(0, limit);
     
-  //   return of(upcoming).pipe(delay(500));
-  // }
+    // return of(upcoming).pipe(delay(500));
+    return this.getEvents().pipe(
+      map(events => events
+        .filter(event => new Date(event.startDate) > new Date()) // Filter by startDate
+        .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+        .slice(0, limit)
+      ),
+      catchError(this.handleError)
+    );
+  }
+
+  // Update create/update/delete if needed, using the correct API URL and types
+  // Example:
+  createEvent(eventData: EventCreateDTO): Observable<Event> { // Use EventCreateDTO and expect Event back
+    return this.httpClient.post<Event>(`${environment.apiUrl}/event`, eventData).pipe( // POST to /api/event
+      catchError(this.handleError)
+    );
+  }
+
+  updateEvent(id: string, eventData: Partial<Event>): Observable<Event> { // Use Partial for updates
+    return this.httpClient.put<Event>(`${environment.apiUrl}/${id}`, eventData).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  deleteEvent(id: string): Observable<void> { // Often returns no content on success
+    return this.httpClient.delete<void>(`${environment.apiUrl}/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
+
 
   // createEvent(event: Omit<Event, 'id' | 'createdAt' | 'updatedAt'>): Observable<Event> {
   //   const newEvent: Event = {
@@ -123,26 +95,26 @@ export class EventService {
   //   return of(newEvent).pipe(delay(500));
   // }
 
-  updateEvent(event: Event): Observable<Event> {
-    const index = this.mockEvents.findIndex(e => e.id === event.id);
-    if (index !== -1) {
-      this.mockEvents[index] = {
-        ...event,
-        updatedAt: new Date()
-      };
-      return of(this.mockEvents[index]).pipe(delay(500));
-    }
-    throw new Error('Event not found');
-  }
+  // updateEvent(event: Event): Observable<Event> {
+  //   const index = this.mockEvents.findIndex(e => e.id === event.id);
+  //   if (index !== -1) {
+  //     this.mockEvents[index] = {
+  //       ...event,
+  //       updatedAt: new Date()
+  //     };
+  //     return of(this.mockEvents[index]).pipe(delay(500));
+  //   }
+  //   throw new Error('Event not found');
+  // }
 
-  deleteEvent(id: string): Observable<boolean> {
-    const index = this.mockEvents.findIndex(e => e.id === id);
-    if (index !== -1) {
-      this.mockEvents.splice(index, 1);
-      return of(true).pipe(delay(500));
-    }
-    return of(false).pipe(delay(500));
-  }
+  // deleteEvent(id: string): Observable<boolean> {
+  //   const index = this.mockEvents.findIndex(e => e.id === id);
+  //   if (index !== -1) {
+  //     this.mockEvents.splice(index, 1);
+  //     return of(true).pipe(delay(500));
+  //   }
+  //   return of(false).pipe(delay(500));
+  // }
 
   getRooms(): Observable<any[]> {
     return this.httpClient.get<any[]>(`${environment.apiUrl}/rooms`).pipe(delay(500));
@@ -156,32 +128,38 @@ export class EventService {
     return this.httpClient.get<any[]>(`${environment.apiUrl}/caterings`).pipe(delay(500));
   }
 
-  createEvent(eventData: any): Observable<any> {
-    return this.httpClient.post(`${environment.apiUrl}/events`, eventData).pipe(delay(500));
-  }
+  // These methods might need adjustment or removal if using API filtering
+  // getEventsByRoom(roomId: string): Observable<Event[]> {
+  //   // API call or client-side filter based on roomReservations
+  //   return this.getEvents().pipe(
+  //     map(events => events.filter(event => event.roomReservations.some(rr => rr.roomId === roomId))),
+  //     delay(500) // Keep delay if desired
+  //   );
+  // }
 
-  getEventsByRoom(roomId: string): Observable<Event[]> {
-    const events = this.mockEvents.filter(event => event.roomId === roomId);
-    return of(events).pipe(delay(500));
-  }
-
-  getEventsByClient(clientId: string): Observable<Event[]> {
-    const events = this.mockEvents.filter(event => event.clientId === clientId);
-    return of(events).pipe(delay(500));
-  }
+  // getEventsByClient(clientId: string): Observable<Event[]> {
+  //   // This might require a specific API endpoint or fetching client details separately
+  //   // const events = this.mockEvents.filter(event => event.clientId === clientId); // Old mock logic
+  //   return of([]).pipe(delay(500)); // Placeholder
+  // }
 
   getEventsByDateRange(startDate: Date, endDate: Date): Observable<Event[]> {
-    const events = this.mockEvents.filter(event => 
-      (event.startDate >= startDate && event.startDate <= endDate) || 
-      (event.endDate >= startDate && event.endDate <= endDate)
+    // Consider adding API parameters for date range filtering for efficiency
+    return this.getEvents().pipe(
+      map(events => events.filter(event => {
+        const eventStart = new Date(event.startDate);
+        const eventEnd = new Date(event.endDate);
+        // Basic overlap check
+        return eventStart < endDate && eventEnd > startDate;
+      })),
+      delay(500) // Keep delay if desired
     );
-    return of(events).pipe(delay(500));
   }
 
-  getEventsByStatus(status: EventStatus): Observable<Event[]> {
-    const events = this.mockEvents.filter(event => event.status === status);
-    return of(events).pipe(delay(500));
-  }
+  // getEventsByStatus(status: EventStatus): Observable<Event[]> {
+  //   const events = this.mockEvents.filter(event => event.status === status);
+  //   return of(events).pipe(delay(500));
+  // }
 }
 
 // src/app/core/services/event.service.ts

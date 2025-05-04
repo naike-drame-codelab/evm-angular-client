@@ -1,6 +1,6 @@
 export enum EventStatus {
-    PENDING = 'pending',
-    CONFIRMED = 'confirmed',
-    CANCELLED = 'cancelled',
-    COMPLETED = 'completed'
-  }
+  Upcoming = 'Upcoming',
+  Ongoing = 'Ongoing',
+  Completed = 'Completed',
+  Cancelled = 'Cancelled'
+}

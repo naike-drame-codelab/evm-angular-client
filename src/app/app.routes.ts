@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './presentation/home/home.component';
+import { EventPublicListComponent } from './presentation/events/event-public-list/event-public-list.component';
 import { OverviewComponent } from './presentation/dashboard/client/overview/overview.component';
 import { EventListComponent } from './presentation/events/event-list/event-list.component';
 import { RoomGridComponent } from './presentation/rooms/room-grid/room-grid.component';
@@ -18,6 +19,7 @@ export const routes: Routes = [
   {path: 'auth', component: AuthComponent}, 
   {path: 'not-found', component: NotFoundComponent}, // Page 404
   { path: 'events/:id/details', component: EventDetailsComponent }, 
+  {path: 'public-events', component: EventPublicListComponent}, // Détails de l'événement
   {path: 'events/:id/checkout', component: CheckoutComponent}, // Détails de l'événement
   {path: 'success', component: SuccessPaymentComponent}, // Page de succès de paiement
   {path: 'cancel', component: CancelPaymentComponent}, // Page d'annulation de paiement

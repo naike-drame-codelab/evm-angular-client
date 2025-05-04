@@ -1,0 +1,75 @@
+@use '@angular/material' as mat;
+
+.event-list-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-500) // Example using Material theme color
+  }
+}
+
+.loading-spinner, .no-events {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px; // Ensure it takes some space
+  color: #666;
+  mat-spinner {
+    margin-bottom: 1rem;
+  }
+}
+
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); // Responsive grid
+  gap: 1.5rem;
+}
+
+.event-card {
+    // Use Material's elevation system for consistency
+    @include mat.elevation(2); // Default subtle shadow
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 8px; // Slightly softer corners
+    overflow: hidden; // Ensure content respects border-radius
+  
+    &:hover {
+      transform: translateY(-4px);
+      @include mat.elevation(8); // More pronounced shadow on hover
+    }
+  
+    .event-description {
+      min-height: 60px; // Give some consistent space for description
+      color: rgba(0, 0, 0, 0.6); // Slightly lighter text for description
+      font-size: 0.9rem;
+      line-height: 1.4;
+      margin-bottom: 1rem; // Add space before actions
+    }
+  
+    mat-card-title {
+      font-size: 1.3rem; // Increase font size
+      font-weight: 600;  // Make it bolder
+      margin-bottom: 0.25rem; // Reduce space below title
+    }
+  
+    mat-card-subtitle {
+      color: rgba(0, 0, 0, 0.54); // Standard Material secondary text color
+      margin-bottom: 1rem; // Add space below subtitle
+    }
+
+    mat-card-actions {
+        padding: 0 16px 16px 16px; // Add padding consistent with card content
+        display: flex;
+        justify-content: flex-end; // Align button to the right
+
+        button {
+            border: 1px solid var(--primary-500); // Add border using primary color
+            border-radius: var(--border-radius); // Use a consistent border radius
+        }
+      }
+}
+

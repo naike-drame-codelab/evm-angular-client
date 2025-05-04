@@ -1,233 +1,196 @@
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
-import { Event, EventStatus } from '../../../core/models/event.model';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms'; // Import validation types
+import { Router, RouterModule } from '@angular/router'; // Remove EventType from here
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { Client } from '../../../core/models/client.model'; // Define these models
+import { EventCreateDTO } from '../../../core/models/event-create.model'; // Ensure EventType is imported correctly below
+import { EventStatus, EventType } from '../../../core/models/event.model';
+import { Room } from '../../../core/models/room.model';
+import { ClientService } from '../../../core/services/client.service';
 import { EventService } from '../../../core/services/event.service';
+import { RoomService } from '../../../core/services/room.service';
 
-@Component({
-  selector: 'app-event-form',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule, // Add ReactiveFormsModule here
-    RouterModule
-  ],
-  templateUrl: './event-form.component.html',
-  styleUrl: './event-form.component.scss'
-})
-// export class EventFormComponent {
-//   eventForm!: FormGroup; // Use the definite assignment assertion (!)
-//   isSubmitting = false;
-//   errorMessage: string | null = null;
-//   // Define available event types and statuses (adjust as needed)
-//   eventTypes: string[] = ['conference', 'workshop', 'meeting', 'webinar', 'social'];
-//   eventStatuses = Object.values(EventStatus); // Get values from enum
-
-//   constructor(
-//     private fb: FormBuilder,
-//     private eventService: EventService,
-//     private router: Router
-//   ) {}
-
-//   ngOnInit(): void {
-//     this.initializeForm();
-//   }
-
-//   initializeForm(): void {
-//     this.eventForm = this.fb.group({
-//       title: ['', [Validators.required, Validators.minLength(3)]],
-//       description: ['', [Validators.required, Validators.maxLength(500)]],
-//       startDate: ['', Validators.required], // Consider separate date/time inputs or a datetime-local input
-//       startTime: ['', Validators.required],
-//       endDate: ['', Validators.required],
-//       endTime: ['', Validators.required],
-//       type: [this.eventTypes[0], Validators.required], // Default to the first type
-//       location: [''], // Optional field
-//       attendees: [0, [Validators.required, Validators.min(0)]],
-//       status: [EventStatus.PENDING, Validators.required] // Default status
-//     }, { validators: this.dateValidator }); // Add custom validator for dates if needed
-//   }
-
-//   // Custom validator example (optional): Ensure end date/time is after start date/time
-//   dateValidator(group: FormGroup): { [key: string]: boolean } | null {
-//     const startDate = group.get('startDate')?.value;
-//     const startTime = group.get('startTime')?.value;
-//     const endDate = group.get('endDate')?.value;
-//     const endTime = group.get('endTime')?.value;
-
-//     if (startDate && startTime && endDate && endTime) {
-//       const startDateTime = new Date(`${startDate}T${startTime}`);
-//       const endDateTime = new Date(`${endDate}T${endTime}`);
-//       if (endDateTime <= startDateTime) {
-//         return { 'endDateBeforeStartDate': true };
-//       }
-//     }
-//     return null;
-//   }
-
-
-//   // Helper getters for easier template access
-//   get title() { return this.eventForm.get('title'); }
-//   get description() { return this.eventForm.get('description'); }
-//   get startDate() { return this.eventForm.get('startDate'); }
-//   get startTime() { return this.eventForm.get('startTime'); }
-//   get endDate() { return this.eventForm.get('endDate'); }
-//   get endTime() { return this.eventForm.get('endTime'); }
-//   get type() { return this.eventForm.get('type'); }
-//   get attendees() { return this.eventForm.get('attendees'); }
-//   get status() { return this.eventForm.get('status'); }
-
-
-    export class EventFormComponent  {
-      eventForm = inject(FormBuilder);
-      eventService = inject(EventService);
-      router = inject(Router);
-    
-      rooms: any[] = [];
-      materials: any[] = [];
-      caterings: any[] = [];
-      selectedMaterials: number[] = [];
-      selectedCaterings: number[] = [];
-    
-      constructor(){
-      this.loadRooms();
-        this.loadMaterials();
-        this.loadCaterings();
-      }
-    
-     
-        this.eventForm = this.fb.group({
-          name: ['', Validators.required],
-          clientId: [null, [Validators.required, Validators.min(1)]],
-          startDate: ['', Validators.required],
-          endDate: ['', Validators.required],
-          type: ['', Validators.required],
-          status: [0, Validators.required],
-          description: [''],
-          imageUrl: [''],
-          roomReservations: this.fb.array([], Validators.required),
-          materialOptions: this.fb.array([]),
-          cateringOptions: this.fb.array([]),
-        }, { validators: this.dateValidator });
-    
-        
-      
-    
-      loadRooms(): void {
-        this.eventService.getRooms().subscribe((data) => (this.rooms = data));
-      }
-    
-      loadMaterials(): void {
-        this.eventService.getMaterials().subscribe((data) => (this.materials = data));
-      }
-    
-      loadCaterings(): void {
-        this.eventService.getCaterings().subscribe((data) => (this.caterings = data));
-      }
-    
-      onRoomSelectionChange(event: any): void {
-        const roomReservations = this.eventForm.get('roomReservations') as FormArray;
-        if (event.target.checked) {
-          roomReservations.push(this.fb.control(event.target.value));
-        } else {
-          const index = roomReservations.controls.findIndex(
-            (x) => x.value === event.target.value
-          );
-          roomReservations.removeAt(index);
-        }
-      }
-    
-      onMaterialSelectionChange(event: any, material: any): void {
-        const materialOptions = this.eventForm.get('materialOptions') as FormArray;
-        if (event.target.checked) {
-          this.selectedMaterials.push(material.id);
-          materialOptions.push(
-            this.fb.group({
-              materialId: [material.id],
-              quantity: [1, Validators.required],
-            })
-          );
-        } else {
-          this.selectedMaterials = this.selectedMaterials.filter(
-            (id) => id !== material.id
-          );
-          const index = materialOptions.controls.findIndex(
-            (x) => x.get('materialId')?.value === material.id
-          );
-          materialOptions.removeAt(index);
-        }
-      }
-    
-      onMaterialQuantityChange(materialId: number, quantity: number): void {
-        const materialOptions = this.eventForm.get('materialOptions') as FormArray;
-        const material = materialOptions.controls.find(
-          (x) => x.get('materialId')?.value === materialId
-        );
-        if (material) {
-          material.get('quantity')?.setValue(quantity);
-        }
-      }
-    
-      onCateringSelectionChange(event: any, catering: any): void {
-        const cateringOptions = this.eventForm.get('cateringOptions') as FormArray;
-        if (event.target.checked) {
-          this.selectedCaterings.push(catering.id);
-          cateringOptions.push(
-            this.fb.group({
-              cateringId: [catering.id],
-              numberOfPeople: [1, Validators.required],
-            })
-          );
-        } else {
-          this.selectedCaterings = this.selectedCaterings.filter(
-            (id) => id !== catering.id
-          );
-          const index = cateringOptions.controls.findIndex(
-            (x) => x.get('cateringId')?.value === catering.id
-          );
-          cateringOptions.removeAt(index);
-        }
-      }
-    
-      onCateringPeopleChange(cateringId: number, numberOfPeople: number): void {
-        const cateringOptions = this.eventForm.get('cateringOptions') as FormArray;
-        const catering = cateringOptions.controls.find(
-          (x) => x.get('cateringId')?.value === cateringId
-        );
-        if (catering) {
-          catering.get('numberOfPeople')?.setValue(numberOfPeople);
-        }
-      }
-    
-      onSubmit(): void {
-        if (this.eventForm.valid) {
-          this.eventService.createEvent(this.eventForm.value).subscribe((response) => {
-            console.log('Event created successfully:', response);
-          });
-        }
-      }
-    }
-
-  onCancel(): void {
-    this.router.navigate(['/events']); // Navigate back to the list
-  }
-}
-
-/*
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { EventService } from './event.service';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-event-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  template: `
-   
-  `,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatButtonModule,
+    MatCardModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatIconModule
+  ],
+  templateUrl: './event-form.component.html',
+  styleUrls: ['./event-form.component.scss']
 })
+export class EventFormComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private eventService = inject(EventService);
+  private clientService = inject(ClientService); // Inject other services
+  private roomService = inject(RoomService);     // Inject other services
+  private router = inject(Router);
+  private snackBar = inject(MatSnackBar);
 
+  eventForm!: FormGroup;
+  isSubmitting = false;
+  loadingData = true;
 
-*/
+  // Data for dropdowns
+  eventTypes = Object.values(EventType);
+  eventStatuses = Object.values(EventStatus);
+  clients: Client[] = [];
+  rooms: Room[] = [];
+  // materials: Material[] = []; // Load if needed
+  // caterings: Catering[] = []; // Load if needed
+
+  ngOnInit(): void {
+    this.buildForm();
+    this.loadDropdownData();
+  }
+
+  buildForm(): void {
+    this.eventForm = this.fb.group({
+      name: ['', [Validators.required, Validators.maxLength(100)]],
+      description: ['', Validators.required],
+      startDate: [null, Validators.required], // Date only
+      startTime: ['', Validators.required], // Time only HH:mm
+      endDate: [null, Validators.required],   // Date only
+      endTime: ['', Validators.required],   // Time only HH:mm
+      type: [null, Validators.required],
+      status: [EventStatus.Upcoming, Validators.required], // Default status
+      clientId: [null, Validators.required],
+      roomReservations: [[], [Validators.required, Validators.minLength(1)]], // Array of room IDs
+      ticketPrice: [0, [Validators.required, Validators.min(0)]],
+      ticketQuantity: [0, [Validators.required, Validators.min(1)]],
+      imageUrl: [''],
+      // Optional: Add FormArrays for materialOptions and cateringOptions if needed
+      // materialOptions: this.fb.array([]),
+      // cateringOptions: this.fb.array([])
+    }, { validators: dateTimeValidator }); // Add custom validator for date/time logic
+  }
+
+  loadDropdownData(): void {
+    this.loadingData = true;
+    // Use forkJoin if loading multiple sources concurrently
+    this.clientService.getClients().subscribe(data => {
+      this.clients = data;
+      // Add error handling
+    });
+    this.roomService.getRooms().subscribe(data => {
+      this.rooms = data;
+      this.loadingData = false; // Set loading to false after last call completes
+      // Add error handling
+    });
+    // Load materials and caterings if needed
+  }
+
+  onSubmit(): void {
+    if (this.eventForm.invalid) {
+      this.snackBar.open('Please fill all required fields correctly.', 'Close', { duration: 3000 });
+      this.eventForm.markAllAsTouched(); // Highlight errors
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    const formValue = this.eventForm.value;
+
+    // Combine Date and Time
+    const startDateTime = combineDateAndTime(formValue.startDate, formValue.startTime);
+    const endDateTime = combineDateAndTime(formValue.endDate, formValue.endTime);
+
+    if (!startDateTime || !endDateTime) {
+        this.snackBar.open('Invalid date or time format.', 'Close', { duration: 3000 });
+        this.isSubmitting = false;
+        return;
+    }
+
+    // Ensure dates are in a suitable format (e.g., ISO string) if needed by API
+    const dto: EventCreateDTO = {
+      ...formValue,
+      // Use combined values
+      startDate: startDateTime.toISOString(),
+      endDate: endDateTime.toISOString(),
+      // Map material/catering options if using FormArrays
+    };
+
+    this.eventService.createEvent(dto).subscribe({
+      next: (createdEvent) => {
+        this.snackBar.open(`Event "${createdEvent.name}" created successfully!`, 'Close', { duration: 3000 });
+        this.router.navigate(['/events', createdEvent.id]); // Navigate to details page
+      },
+      error: (err) => {
+        console.error('Error creating event:', err);
+        this.snackBar.open(`Error creating event: ${err.message || 'Unknown error'}`, 'Close', { duration: 5000 });
+        this.isSubmitting = false;
+      },
+      complete: () => {
+        this.isSubmitting = false;
+      }
+    });
+  }
+
+  // Helper methods for FormArrays if used (e.g., addMaterialOption, removeMaterialOption)
+}
+
+// --- Helper Functions ---
+
+/**
+ * Combines a Date object (date part) and a time string (HH:mm) into a new Date object.
+ * @param date The date object.
+ * @param timeString The time string in HH:mm format.
+ * @returns A new Date object with combined date and time, or null if inputs are invalid.
+ */
+function combineDateAndTime(date: Date | null, timeString: string | null): Date | null {
+  if (!date || !timeString) return null;
+
+  const timeParts = timeString.match(/^(\d{2}):(\d{2})$/);
+  if (!timeParts) return null; // Invalid time format
+
+  const hours = parseInt(timeParts[1], 10);
+  const minutes = parseInt(timeParts[2], 10);
+
+  if (isNaN(hours) || hours < 0 || hours > 23 || isNaN(minutes) || minutes < 0 || minutes > 59) {
+    return null; // Invalid time values
+  }
+
+  const newDate = new Date(date);
+  newDate.setHours(hours, minutes, 0, 0); // Set hours and minutes, reset seconds/ms
+  return newDate;
+}
+
+/**
+ * Custom validator to check if end date/time is after start date/time.
+ */
+export const dateTimeValidator: Validators = (control: AbstractControl): ValidationErrors | null => {
+  const startDate = control.get('startDate')?.value;
+  const startTime = control.get('startTime')?.value;
+  const endDate = control.get('endDate')?.value;
+  const endTime = control.get('endTime')?.value;
+
+  const startDateTime = combineDateAndTime(startDate, startTime);
+  const endDateTime = combineDateAndTime(endDate, endTime);
+
+  return startDateTime && endDateTime && endDateTime <= startDateTime
+    ? { dateTimeInvalid: true } // Return error if end is not after start
+    : null; // Return null if valid or not enough info yet
+};
