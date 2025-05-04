@@ -1,12 +1,12 @@
 import { EventType, EventStatus } from "./event.model";
 
 export interface MaterialOptionCreateDTO {
-    materialId: string; // Assuming Guid maps to string
+    materialId: number; // Assuming Guid maps to string
     quantity: number;
   }
   
   export interface CateringOptionCreateDTO {
-    cateringId: string; // Assuming Guid maps to string
+    cateringId: number; // Assuming Guid maps to string
     numberOfPeople: number;
   }
   

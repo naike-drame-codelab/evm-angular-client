@@ -3,7 +3,9 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, delay } from 'rxjs/operators'; import { Event, EventStatus, EventType, RoomReservationDTO, MaterialOptionDTO, CateringOptionDTO } from '../models/event.model'; // Import new types
 import { environment } from '../../../environments/environment.development';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { EventCreateDTO } from '../models/event-create.model'; 
+import { EventCreateDTO } from '../models/event-create.model';
+import { Material } from '../models/material.model';
+import { Catering } from '../models/catering.model';
 
 
 @Injectable({
@@ -50,7 +52,7 @@ export class EventService {
     //   .filter(event => event.startDate > now)
     //   .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
     //   .slice(0, limit);
-    
+
     // return of(upcoming).pipe(delay(500));
     return this.getEvents().pipe(
       map(events => events
@@ -82,50 +84,19 @@ export class EventService {
     );
   }
 
-
-  // createEvent(event: Omit<Event, 'id' | 'createdAt' | 'updatedAt'>): Observable<Event> {
-  //   const newEvent: Event = {
-  //     ...event,
-  //     id: (this.mockEvents.length + 1).toString(),
-  //     createdAt: new Date(),
-  //     updatedAt: new Date()
-  //   };
-    
-  //   this.mockEvents.push(newEvent);
-  //   return of(newEvent).pipe(delay(500));
-  // }
-
-  // updateEvent(event: Event): Observable<Event> {
-  //   const index = this.mockEvents.findIndex(e => e.id === event.id);
-  //   if (index !== -1) {
-  //     this.mockEvents[index] = {
-  //       ...event,
-  //       updatedAt: new Date()
-  //     };
-  //     return of(this.mockEvents[index]).pipe(delay(500));
-  //   }
-  //   throw new Error('Event not found');
-  // }
-
-  // deleteEvent(id: string): Observable<boolean> {
-  //   const index = this.mockEvents.findIndex(e => e.id === id);
-  //   if (index !== -1) {
-  //     this.mockEvents.splice(index, 1);
-  //     return of(true).pipe(delay(500));
-  //   }
-  //   return of(false).pipe(delay(500));
-  // }
-
   getRooms(): Observable<any[]> {
-    return this.httpClient.get<any[]>(`${environment.apiUrl}/rooms`).pipe(delay(500));
+    return this.httpClient.get<any[]>(`${environment.apiUrl}/room`).pipe(
+      catchError(this.handleError));
   }
 
-  getMaterials(): Observable<any[]> {
-    return this.httpClient.get<any[]>(`${environment.apiUrl}/materials`).pipe(delay(500));
+  getMaterials(): Observable<Material[]> {
+    return this.httpClient.get<Material[]>(`${environment.apiUrl}/material`).pipe(
+      catchError(this.handleError));
   }
 
-  getCaterings(): Observable<any[]> {
-    return this.httpClient.get<any[]>(`${environment.apiUrl}/caterings`).pipe(delay(500));
+  getCaterings(): Observable<Catering[]> {
+    return this.httpClient.get<Catering[]>(`${environment.apiUrl}/catering`).pipe(
+      catchError(this.handleError));
   }
 
   // These methods might need adjustment or removal if using API filtering

@@ -99,6 +99,65 @@
            </mat-error>
         </mat-form-field>
 
+        <!-- Catering Options (FormArray) -->
+        <div class="form-array-section">
+          <h4>Catering Options</h4>
+          <div formArrayName="cateringOptions">
+            <div *ngFor="let option of cateringOptions.controls; let i=index" [formGroupName]="i" class="form-array-item">
+
+              <mat-form-field appearance="fill" class="catering-select">
+                <mat-label>Catering Service</mat-label>
+                <mat-select formControlName="cateringId" required>
+                  <mat-option *ngFor="let catering of caterings" [value]="catering.id">
+                    {{ catering.name }} <!-- Assuming catering has name -->
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="option.get('cateringId')?.hasError('required')">Required</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="catering-quantity">
+                <mat-label>Number of People</mat-label>
+                <input matInput type="number" formControlName="numberOfPeople" required min="1">
+                <mat-error *ngIf="option.get('numberOfPeople')?.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="option.get('numberOfPeople')?.hasError('min')">Min 1</mat-error>
+              </mat-form-field>
+
+              <button mat-icon-button color="warn" type="button" (click)="removeCateringOption(i)" aria-label="Remove catering option">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <button mat-stroked-button type="button" (click)="addCateringOption()">
+            <mat-icon>add</mat-icon> Add Catering Option
+          </button>
+        </div>
+
+        <!-- Material Options (FormArray) -->
+        <div class="form-array-section">
+          <h4>Material Options</h4>
+          <div formArrayName="materialOptions">
+            <div *ngFor="let option of materialOptions.controls; let i=index" [formGroupName]="i" class="form-array-item">
+
+              <mat-form-field appearance="fill" class="material-select">
+                <mat-label>Material</mat-label>
+                <mat-select formControlName="materialId" required>
+                  <mat-option *ngFor="let material of materials" [value]="material.id">
+                    {{ material.name }} <!-- Assuming material has name -->
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="option.get('materialId')?.hasError('required')">Required</mat-error>
+              </mat-form-field>
+
+              <button mat-icon-button color="warn" type="button" (click)="removeMaterialOption(i)" aria-label="Remove material option">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <button mat-stroked-button type="button" (click)="addMaterialOption()">
+            <mat-icon>add</mat-icon> Add Material Option
+          </button>
+        </div> <!-- Missing closing div for form-array-section -->
+
         <!-- Ticket Price & Quantity -->
          <div class="ticket-info">
             <mat-form-field appearance="fill">
