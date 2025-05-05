@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { EventService } from '../../../../core/services/event.service';
-import { RoomService } from '../../../../core/services/room.service';
+// import { RoomService } from '../../../../core/services/room.service';
 import { ClientService } from '../../../../core/services/client.service';
 import { AnalyticsService, VenueMetrics } from '../../../../core/services/analytics.service';
 import { Event } from '../../../../core/models/event.model';

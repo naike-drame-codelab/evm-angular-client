@@ -1,293 +1,265 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, OnDestroy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray, AbstractControl, ValidationErrors } from '@angular/forms';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router'; // Import ActivatedRoute
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
+import { forkJoin, Subscription, switchMap, of } from 'rxjs'; // Import forkJoin, Subscription, switchMap, of
+
+import { Client } from '../../../core/models/client.model';
+import { EventCreateDTO } from '../../../core/models/event-create.model'; // Use for structure, maybe create EventUpdateDTO later
+import { Event, EventStatus, EventType } from '../../../core/models/event.model'; // Import Event
+import { Room } from '../../../core/models/room.model';
+import { Catering } from '../../../core/models/catering.model';
+import { Material } from '../../../core/models/material.model';
+import { ClientService } from '../../../core/services/client.service';
+import { EventService } from '../../../core/services/event.service';
+// import { RoomService } from '../../../core/services/room.service';
 
 @Component({
   selector: 'app-event-edit',
-  imports: [],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatButtonModule,
+    MatCardModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    MatIconModule
+  ],
   templateUrl: './event-edit.component.html',
-  styleUrl: './event-edit.component.scss'
+  styleUrls: ['./event-edit.component.scss'] // Link to SCSS
 })
-export class EventEditComponent {
+export class EventEditComponent implements OnInit, OnDestroy {
+  private fb = inject(FormBuilder);
+  private eventService = inject(EventService);
+  private clientService = inject(ClientService);
+  // private roomService = inject(RoomService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute); // Inject ActivatedRoute
+  private snackBar = inject(MatSnackBar);
 
-}
-
-/*
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { EventService } from './event.service';
-import { EventDetailsDTO, Room, Material, Catering } from './models';
-
-@Component({
-  selector: 'app-edit-event',
-  template: `
-    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
-      <div>
-        <label for="name">Event Name</label>
-        <input id="name" formControlName="name" />
-      </div>
-
-      <div>
-        <label for="clientId">Client ID</label>
-        <input id="clientId" formControlName="clientId" type="number" />
-      </div>
-
-      <div>
-        <label for="startDate">Start Date</label>
-        <input id="startDate" formControlName="startDate" type="datetime-local" />
-      </div>
-
-      <div>
-        <label for="endDate">End Date</label>
-        <input id="endDate" formControlName="endDate" type="datetime-local" />
-      </div>
-
-      <div>
-        <label for="type">Event Type</label>
-        <select id="type" formControlName="type">
-          <option value="Conference">Conference</option>
-          <option value="Corporate">Corporate</option>
-          <option value="Wedding">Wedding</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="status">Event Status</label>
-        <select id="status" formControlName="status">
-          <option value="0">Pending</option>
-          <option value="1">Confirmed</option>
-          <option value="2">Cancelled</option>
-        </select>
-      </div>
-
-      <div>
-        <label for="description">Description</label>
-        <textarea id="description" formControlName="description"></textarea>
-      </div>
-
-      <div>
-        <label for="imageUrl">Image URL</label>
-        <input id="imageUrl" formControlName="imageUrl" />
-      </div>
-
-      <div>
-        <label>Room Reservations</label>
-        <div *ngFor="let room of rooms">
-          <input
-            type="checkbox"
-            [value]="room.id"
-            (change)="onRoomSelectionChange($event)"
-            [checked]="selectedRooms.includes(room.id)"
-          />
-          {{ room.name }}
-        </div>
-      </div>
-
-      <div>
-        <label>Material Options</label>
-        <div *ngFor="let material of materials">
-          <input
-            type="checkbox"
-            [value]="material.id"
-            (change)="onMaterialSelectionChange($event, material)"
-            [checked]="selectedMaterials.includes(material.id)"
-          />
-          {{ material.name }}
-          <input
-            *ngIf="selectedMaterials.includes(material.id)"
-            type="number"
-            placeholder="Quantity"
-            (input)="onMaterialQuantityChange(material.id, $event.target.value)"
-          />
-        </div>
-      </div>
-
-      <div>
-        <label>Catering Options</label>
-        <div *ngFor="let catering of caterings">
-          <input
-            type="checkbox"
-            [value]="catering.id"
-            (change)="onCateringSelectionChange($event, catering)"
-            [checked]="selectedCaterings.includes(catering.id)"
-          />
-          {{ catering.name }}
-          <input
-            *ngIf="selectedCaterings.includes(catering.id)"
-            type="number"
-            placeholder="Number of People"
-            (input)="onCateringPeopleChange(catering.id, $event.target.value)"
-          />
-        </div>
-      </div>
-
-      <button type="submit" [disabled]="eventForm.invalid">Update Event</button>
-    </form>
-  `,
-})
-export class EditEventComponent implements OnInit {
   eventForm!: FormGroup;
-  eventId!: string;
-  rooms: Room[] = [];
-  materials: Material[] = [];
-  caterings: Catering[] = [];
-  selectedRooms: number[] = [];
-  selectedMaterials: number[] = [];
-  selectedCaterings: number[] = [];
+  isSubmitting = false;
+  loadingData = true;
+  eventId: string | null = null;
+  private dataSub?: Subscription;
 
-  constructor(
-    private fb: FormBuilder,
-    private eventService: EventService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  // Data for dropdowns
+  eventTypes = Object.values(EventType);
+  eventStatuses = Object.values(EventStatus);
+  clients: Client[] = [];
+  rooms: Room[] = [];
+  caterings: Catering[] = [];
+  materials: Material[] = [];
 
   ngOnInit(): void {
-    this.eventId = this.route.snapshot.paramMap.get('id')!;
-    this.initializeForm();
-    this.loadEventDetails();
-    this.loadRooms();
-    this.loadMaterials();
-    this.loadCaterings();
+    this.buildForm();
+    this.loadInitialData();
   }
 
-  initializeForm(): void {
+  ngOnDestroy(): void {
+    this.dataSub?.unsubscribe(); // Clean up subscription
+  }
+
+  buildForm(): void {
+    // Same form structure as EventFormComponent
     this.eventForm = this.fb.group({
-      name: ['', Validators.required],
-      clientId: [null, [Validators.required, Validators.min(1)]],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
-      type: ['', Validators.required],
-      status: [0, Validators.required],
-      description: [''],
-      imageUrl: [''],
-      roomReservations: this.fb.array([], Validators.required),
-      materialOptions: this.fb.array([]),
+      name: ['', [Validators.required, Validators.maxLength(100)]],
+      description: ['', Validators.required],
+      startDate: [null, Validators.required],
+      startTime: ['', Validators.required],
+      endDate: [null, Validators.required],
+      endTime: ['', Validators.required],
+      type: [null, Validators.required],
+      status: [null, Validators.required], // Don't default status on edit
+      clientId: [null, Validators.required],
+      roomReservations: [[], [Validators.required, Validators.minLength(1)]],
       cateringOptions: this.fb.array([]),
+      materialOptions: this.fb.array([]),
+      ticketPrice: [0, [Validators.required, Validators.min(0)]],
+      ticketQuantity: [0, [Validators.required, Validators.min(1)]],
+      imageUrl: [''],
+    }, { validators: dateTimeValidator });
+  }
+
+  loadInitialData(): void {
+    this.loadingData = true;
+    this.dataSub = this.route.paramMap.pipe(
+      switchMap(params => {
+        this.eventId = params.get('id');
+        if (!this.eventId) {
+          this.snackBar.open('Event ID not found in route.', 'Close', { duration: 3000 });
+          this.router.navigate(['/client/events']); // Or appropriate error route
+          return of(null); // Stop further processing
+        }
+        // Fetch dropdown data and event data concurrently
+        return forkJoin({
+          clients: this.clientService.getClients(),
+          rooms: this.eventService.getRooms(),
+          materials: this.eventService.getMaterials(),
+          caterings: this.eventService.getCaterings(),
+          event: this.eventService.getEventById(this.eventId) // Fetch the specific event
+        });
+      })
+    ).subscribe({
+      next: (data) => {
+        if (!data) return; // Exit if eventId was missing
+
+        this.clients = data.clients;
+        this.rooms = data.rooms;
+        this.materials = data.materials;
+        this.caterings = data.caterings;
+
+        if (data.event) {
+          this.populateForm(data.event);
+        } else {
+          this.snackBar.open(`Event with ID ${this.eventId} not found.`, 'Close', { duration: 3000 });
+          this.router.navigate(['/client/events']); // Redirect if event not found
+        }
+        this.loadingData = false;
+      },
+      error: (err) => {
+        console.error('Error loading initial data:', err);
+        this.snackBar.open(`Error loading data: ${err.message || 'Unknown error'}`, 'Close', { duration: 5000 });
+        this.loadingData = false;
+        this.router.navigate(['/client/events']); // Redirect on error
+      }
     });
   }
 
-  loadEventDetails(): void {
-    this.eventService.getEventDetails(this.eventId).subscribe((event: EventDetailsDTO) => {
-      this.eventForm.patchValue({
-        name: event.name,
-        clientId: event.clientId,
-        startDate: event.startDate,
-        endDate: event.endDate,
-        type: event.type,
-        status: event.status,
-        description: event.description,
-        imageUrl: event.imageUrl,
-      });
+  populateForm(event: Event): void {
+    const startDate = new Date(event.startDate);
+    const endDate = new Date(event.endDate);
 
-      // Populate room reservations
-      this.selectedRooms = event.roomReservations.map((r) => r.roomId);
-      const roomReservations = this.eventForm.get('roomReservations') as FormArray;
-      this.selectedRooms.forEach((roomId) => roomReservations.push(this.fb.control(roomId)));
-
-      // Populate material options
-      this.selectedMaterials = event.materialOptions?.map((m) => m.materialId) || [];
-      const materialOptions = this.eventForm.get('materialOptions') as FormArray;
-      event.materialOptions?.forEach((m) =>
-        materialOptions.push(
-          this.fb.group({
-            materialId: [m.materialId],
-            quantity: [m.quantity, Validators.required],
-          })
-        )
-      );
-
-      // Populate catering options
-      this.selectedCaterings = event.cateringOptions?.map((c) => c.cateringId) || [];
-      const cateringOptions = this.eventForm.get('cateringOptions') as FormArray;
-      event.cateringOptions?.forEach((c) =>
-        cateringOptions.push(
-          this.fb.group({
-            cateringId: [c.cateringId],
-            numberOfPeople: [c.numberOfPeople, Validators.required],
-          })
-        )
-      );
+    this.eventForm.patchValue({
+      name: event.name,
+      description: event.description,
+      startDate: startDate,
+      startTime: `${startDate.getHours().toString().padStart(2, '0')}:${startDate.getMinutes().toString().padStart(2, '0')}`,
+      endDate: endDate,
+      endTime: `${endDate.getHours().toString().padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}`,
+      type: event.type,
+      status: event.status,
+      clientId: event.roomReservations[0]?.roomId, // Assuming clientId is linked via room or needs separate fetching
+      roomReservations: event.roomReservations.map(rr => rr.roomId), // Assuming DTO has roomId
+      ticketPrice: event.ticketPrice, // Adjust based on actual Event model
+      ticketQuantity: event.ticketQuantity, // Adjust based on actual Event model
+      imageUrl: event.imageUrl,
     });
+
+    // Populate FormArrays
+    event.cateringOptions?.forEach(co => this.cateringOptions.push(this.fb.group({
+      cateringId: [co.cateringId, Validators.required],
+      numberOfPeople: [co.numberOfPeople, [Validators.required, Validators.min(1)]]
+    })));
+
+    event.materialOptions?.forEach(mo => this.materialOptions.push(this.fb.group({
+      materialId: [mo.materialId, Validators.required],
+      quantity: [mo.quantity, [Validators.required, Validators.min(1)]]
+    })));
   }
 
-  loadRooms(): void {
-    this.eventService.getRooms().subscribe((data) => (this.rooms = data));
-  }
-
-  loadMaterials(): void {
-    this.eventService.getMaterials().subscribe((data) => (this.materials = data));
-  }
-
-  loadCaterings(): void {
-    this.eventService.getCaterings().subscribe((data) => (this.caterings = data));
-  }
-
-  onRoomSelectionChange(event: any): void {
-    const roomReservations = this.eventForm.get('roomReservations') as FormArray;
-    if (event.target.checked) {
-      roomReservations.push(this.fb.control(event.target.value));
-    } else {
-      const index = roomReservations.controls.findIndex((x) => x.value === event.target.value);
-      roomReservations.removeAt(index);
-    }
-  }
-
-  onMaterialSelectionChange(event: any, material: Material): void {
-    const materialOptions = this.eventForm.get('materialOptions') as FormArray;
-    if (event.target.checked) {
-      this.selectedMaterials.push(material.id);
-      materialOptions.push(
-        this.fb.group({
-          materialId: [material.id],
-          quantity: [1, Validators.required],
-        })
-      );
-    } else {
-      this.selectedMaterials = this.selectedMaterials.filter((id) => id !== material.id);
-      const index = materialOptions.controls.findIndex((x) => x.get('materialId')?.value === material.id);
-      materialOptions.removeAt(index);
-    }
-  }
-
-  onMaterialQuantityChange(materialId: number, quantity: number): void {
-    const materialOptions = this.eventForm.get('materialOptions') as FormArray;
-    const material = materialOptions.controls.find((x) => x.get('materialId')?.value === materialId);
-    if (material) {
-      material.get('quantity')?.setValue(quantity);
-    }
-  }
-
-  onCateringSelectionChange(event: any, catering: Catering): void {
-    const cateringOptions = this.eventForm.get('cateringOptions') as FormArray;
-    if (event.target.checked) {
-      this.selectedCaterings.push(catering.id);
-      cateringOptions.push(
-        this.fb.group({
-          cateringId: [catering.id],
-          numberOfPeople: [1, Validators.required],
-        })
-      );
-    } else {
-      this.selectedCaterings = this.selectedCaterings.filter((id) => id !== catering.id);
-      const index = cateringOptions.controls.findIndex((x) => x.get('cateringId')?.value === catering.id);
-      cateringOptions.removeAt(index);
-    }
-  }
-
-  onCateringPeopleChange(cateringId: number, numberOfPeople: number): void {
-    const cateringOptions = this.eventForm.get('cateringOptions') as FormArray;
-    const catering = cateringOptions.controls.find((x) => x.get('cateringId')?.value === cateringId);
-    if (catering) {
-      catering.get('numberOfPeople')?.setValue(numberOfPeople);
-    }
-  }
+  // --- FormArray Helpers (Copy from EventFormComponent) ---
+  get cateringOptions(): FormArray { return this.eventForm.get('cateringOptions') as FormArray; }
+  get materialOptions(): FormArray { return this.eventForm.get('materialOptions') as FormArray; }
+  newCateringOption(): FormGroup { return this.fb.group({ cateringId: [null, Validators.required], numberOfPeople: [1, [Validators.required, Validators.min(1)]] }); }
+  addCateringOption(): void { this.cateringOptions.push(this.newCateringOption()); }
+  removeCateringOption(index: number): void { this.cateringOptions.removeAt(index); }
+  newMaterialOption(): FormGroup { return this.fb.group({ materialId: [null, Validators.required], quantity: [1, [Validators.required, Validators.min(1)]] }); }
+  addMaterialOption(): void { this.materialOptions.push(this.newMaterialOption()); }
+  removeMaterialOption(index: number): void { this.materialOptions.removeAt(index); }
+  // --- End FormArray Helpers ---
 
   onSubmit(): void {
-    if (this.eventForm.valid) {
-      this.eventService.updateEvent(this.eventId, this.eventForm.value).subscribe(() => {
-        this.router.navigate(['/events']);
-      });
+    if (this.eventForm.invalid || !this.eventId) {
+      this.snackBar.open('Please fill all required fields correctly.', 'Close', { duration: 3000 });
+      this.eventForm.markAllAsTouched();
+      return;
     }
+
+    this.isSubmitting = true;
+    const formValue = this.eventForm.value;
+    const startDateTime = combineDateAndTime(formValue.startDate, formValue.startTime);
+    const endDateTime = combineDateAndTime(formValue.endDate, formValue.endTime);
+
+    if (!startDateTime || !endDateTime) {
+      this.snackBar.open('Invalid date or time format.', 'Close', { duration: 3000 });
+      this.isSubmitting = false;
+      return;
+    }
+
+    // Create the update DTO (might need a specific EventUpdateDTO later)
+    // Using Partial<Event> for now, adjust based on your API needs
+    const updateData: Partial<Event> = {
+      name: formValue.name,
+      description: formValue.description,
+      startDate: startDateTime.toISOString(),
+      endDate: endDateTime.toISOString(),
+      type: formValue.type,
+      status: formValue.status,
+      // clientId: formValue.clientId, // Handle how client is updated if necessary
+      roomReservations: formValue.roomReservations.map((roomId: string) => ({ roomId })), // Map back to DTO structure if needed
+      cateringOptions: formValue.cateringOptions,
+      materialOptions: formValue.materialOptions,
+      // tickets: [{...}] // Handle ticket updates if necessary
+      imageUrl: formValue.imageUrl,
+    };
+
+    this.eventService.updateEvent(this.eventId, updateData).subscribe({
+      next: (updatedEvent) => {
+        this.snackBar.open(`Event "${updatedEvent.name}" updated successfully!`, 'Close', { duration: 3000 });
+        this.router.navigate(['/admin/events']); // Navigate to details page
+      },
+      error: (err) => {
+        console.error('Error updating event:', err);
+        this.snackBar.open(`Error updating event: ${err.message || 'Unknown error'}`, 'Close', { duration: 5000 });
+        this.isSubmitting = false;
+      },
+      complete: () => {
+        this.isSubmitting = false;
+      }
+    });
   }
 }
-*/
+
+// --- Helper Functions (Copy from EventFormComponent or move to shared utils) ---
+// Removed duplicate implementation of combineDateAndTime
+// Removed duplicate declaration of dateTimeValidator
+
+// --- Paste the full implementation of combineDateAndTime and dateTimeValidator here ---
+function combineDateAndTime(date: Date | null, timeString: string | null): Date | null {
+    if (!date || !timeString) return null;
+    const timeParts = timeString.match(/^(\d{2}):(\d{2})$/);
+    if (!timeParts) return null;
+    const hours = parseInt(timeParts[1], 10);
+    const minutes = parseInt(timeParts[2], 10);
+    if (isNaN(hours) || hours < 0 || hours > 23 || isNaN(minutes) || minutes < 0 || minutes > 59) return null;
+    const newDate = new Date(date);
+    newDate.setHours(hours, minutes, 0, 0);
+    return newDate;
+}
+export const dateTimeValidator: Validators = (control: AbstractControl): ValidationErrors | null => {
+    const startDate = control.get('startDate')?.value;
+    const startTime = control.get('startTime')?.value;
+    const endDate = control.get('endDate')?.value;
+    const endTime = control.get('endTime')?.value;
+    const startDateTime = combineDateAndTime(startDate, startTime);
+    const endDateTime = combineDateAndTime(endDate, endTime);
+    return startDateTime && endDateTime && endDateTime <= startDateTime ? { dateTimeInvalid: true } : null;
+};

@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router';
 import { EventListComponent } from '../../../events/event-list/event-list.component';
-import { RoomGridComponent } from '../../../rooms/room-grid/room-grid.component';
 import { OverviewComponent } from '../overview/overview.component';
 
 @Component({
@@ -13,7 +12,7 @@ import { OverviewComponent } from '../overview/overview.component';
     RouterModule,
     OverviewComponent,
     EventListComponent,
-    RoomGridComponent],
+    ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })

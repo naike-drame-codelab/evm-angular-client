@@ -49,5 +49,7 @@ export interface Event {
   roomReservations: RoomReservationDTO[];
   materialOptions?: MaterialOptionDTO[];
   cateringOptions?: CateringOptionDTO[];
-  // Removed: roomId, clientId, attendees, amenities, notes, createdAt, updatedAt (unless they are part of EventDetailsDTO)
+  ticketPrice: number;
+  ticketQuantity: number;
+  clientId: number; // Assuming int based on backend check
 }

@@ -22,8 +22,7 @@
     </mat-card-content>
 
     <mat-card-actions class="success-actions">
-      <button mat-raised-button color="primary" routerLink="/events">Retourner aux événements</button>
-      <button mat-stroked-button color="accent" routerLink="/my-tickets">Voir mes billets</button> <!-- Mettez le bon chemin -->
+      <button mat-stroked-button color="accent" (click)="goBack()">Retourner aux événements</button>
     </mat-card-actions>
   </mat-card>
 </div>

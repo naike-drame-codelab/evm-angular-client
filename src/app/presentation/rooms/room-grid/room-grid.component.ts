@@ -1,122 +1,71 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { RoomService } from '../../../core/services/room.service';
-import { Room, RoomType } from '../../../core/models/room.model';
-
+import { EventService } from '../../../core/services/event.service';
+import { Room } from '../../../core/models/room.model';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-room-grid',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule,
+    RouterModule, // Add RouterModule
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatIconModule,
+    MatButtonModule,
+    CurrencyPipe // Add CurrencyPipe
+    ,],
   templateUrl: './room-grid.component.html',
   styleUrls: ['./room-grid.component.scss']
 })
 export class RoomGridComponent implements OnInit {
-  rooms: Room[] = [];
-  filteredRooms: Room[] = [];
-  loading = true;
-  searchTerm = '';
-  typeFilter: RoomType | 'all' = 'all';
-  capacityMin = 0;
-  sortBy: 'name' | 'capacity' | 'rate' = 'name';
-  sortDirection: 'asc' | 'desc' = 'asc';
+    private eventService = inject(EventService);
 
-  constructor(private roomService: RoomService) {}
-
-  ngOnInit(): void {
-    this.loadRooms();
-  }
-
-  loadRooms(): void {
-    this.loading = true;
-    this.roomService.getRooms().subscribe({
-      next: (rooms) => {
-        this.rooms = rooms;
-        this.applyFilters();
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error loading rooms', error);
-        this.loading = false;
-      }
-    });
-  }
-
-  applyFilters(): void {
-    let result = [...this.rooms];
-    
-    // Apply search filter
-    if (this.searchTerm.trim()) {
-      const term = this.searchTerm.toLowerCase();
-      result = result.filter(room => 
-        room.name.toLowerCase().includes(term) || 
-        room.description.toLowerCase().includes(term) ||
-        room.amenities.some(amenity => amenity.toLowerCase().includes(term))
-      );
+    rooms: Room[] = [];
+    loading = true;
+    error: string | null = null;
+  
+    // Mapping des IDs de salle aux URLs d'images
+    roomImageMap: { [key: number]: string } = {
+      1: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1200&auto=format&fit=crop', // Grand Ballroom
+      2: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=1200&auto=format&fit=crop', // Conference Room A
+      3: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=1200&auto=format&fit=crop', // Meeting Room 1
+      4: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?q=80&w=1200&auto=format&fit=crop', // Executive Suite (Nouvelle image)
+      5: 'https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=1200&auto=format&fit=crop'  // Training Room B
+    };
+    defaultRoomImage = 'assets/images/placeholder-room.jpg'; // Image par défaut
+  
+    ngOnInit(): void {
+      this.loadRooms();
     }
-    
-    // Apply type filter
-    if (this.typeFilter !== 'all') {
-      result = result.filter(room => room.roomType === this.typeFilter);
+  
+    loadRooms(): void {
+      this.loading = true;
+      this.error = null;
+      this.eventService.getRooms().subscribe({
+        next: (data) => {
+          this.rooms = data;
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error loading rooms:', err);
+          this.error = 'Failed to load rooms. Please try again later.';
+          this.loading = false;
+        }
+      });
     }
-    
-    // Apply capacity filter
-    if (this.capacityMin > 0) {
-      result = result.filter(room => room.capacity >= this.capacityMin);
+  
+    // Optional: Add a retry method
+    retryLoadRooms(): void {
+      this.loadRooms();
     }
-    
-    // Apply sorting
-    result.sort((a, b) => {
-      let comparison = 0;
-      
-      if (this.sortBy === 'name') {
-        comparison = a.name.localeCompare(b.name);
-      } else if (this.sortBy === 'capacity') {
-        comparison = a.capacity - b.capacity;
-      } else if (this.sortBy === 'rate') {
-        comparison = a.hourlyRate - b.hourlyRate;
-      }
-      
-      return this.sortDirection === 'asc' ? comparison : -comparison;
-    });
-    
-    this.filteredRooms = result;
-  }
-
-  onSearch(): void {
-    this.applyFilters();
-  }
-
-  onFilterChange(): void {
-    this.applyFilters();
-  }
-
-  onSortChange(): void {
-    this.applyFilters();
-  }
-
-  toggleSortDirection(): void {
-    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    this.applyFilters();
-  }
-
-  formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount);
-  }
-
-  getRoomTypeIcon(type: RoomType): string {
-    switch (type) {
-      case RoomType.BALLROOM: return 'stars';
-      case RoomType.CONFERENCE: return 'groups';
-      case RoomType.MEETING: return 'business';
-      case RoomType.BANQUET: return 'restaurant';
-      case RoomType.THEATER: return 'theaters';
-      case RoomType.OUTDOOR: return 'park';
-      default: return 'room';
+  
+    // Méthode pour obtenir l'URL de l'image
+    getRoomImageUrl(roomId: number): string {
+      return this.roomImageMap[roomId] || this.defaultRoomImage;
     }
   }
-}

@@ -1,30 +1,8 @@
 export interface Room {
-    id: string;
+    id: number; // Changed from string to number to match C# int Id
     name: string;
     capacity: number;
-    hourlyRate: number;
+    pricePerHour: number; // Renamed from hourlyRate to match C# PricePerHour (decimal maps to number)
     description: string;
-    images: string[];
-    amenities: string[];
-    availability: TimeSlot[];
-    floor: number;
-    roomType: RoomType;
-    isActive: boolean;
-  }
-  
-  export interface TimeSlot {
-    date: Date;
-    startTime: Date;
-    endTime: Date;
-    isBooked: boolean;
-    eventId?: string;
-  }
-  
-  export enum RoomType {
-    BALLROOM = 'ballroom',
-    CONFERENCE = 'conference',
-    MEETING = 'meeting',
-    BANQUET = 'banquet',
-    THEATER = 'theater',
-    OUTDOOR = 'outdoor'
+    isAvailable: boolean; // Renamed from isActive to match C# IsAvailable
   }

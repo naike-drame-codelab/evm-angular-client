@@ -20,7 +20,7 @@ import { Catering } from '../../../core/models/catering.model'; // Import Cateri
 import { Material } from '../../../core/models/material.model'; // Import Material model
 import { ClientService } from '../../../core/services/client.service';
 import { EventService } from '../../../core/services/event.service';
-import { RoomService } from '../../../core/services/room.service';
+// import { RoomService } from '../../../core/services/room.service';
 
 
 @Component({
@@ -48,7 +48,7 @@ export class EventFormComponent implements OnInit {
     private fb = inject(FormBuilder);
     private eventService = inject(EventService);
     private clientService = inject(ClientService); // Inject other services
-    private roomService = inject(RoomService);     // Inject other services
+    // private roomService = inject(RoomService);     // Inject other services
     private router = inject(Router);
     private snackBar = inject(MatSnackBar);
 
@@ -88,9 +88,6 @@ export class EventFormComponent implements OnInit {
             ticketPrice: [0, [Validators.required, Validators.min(0)]],
             ticketQuantity: [0, [Validators.required, Validators.min(1)]],
             imageUrl: [''],
-            // Optional: Add FormArrays for materialOptions and cateringOptions if needed
-            // materialOptions: this.fb.array([]),
-            // cateringOptions: this.fb.array([])
         }, { validators: dateTimeValidator }); // Add custom validator for date/time logic
     }
 
@@ -101,7 +98,7 @@ export class EventFormComponent implements OnInit {
             this.clients = data;
             // TODO: Add error handling
         });
-        this.roomService.getRooms().subscribe(data => {
+        this.eventService.getRooms().subscribe(data => {
             this.rooms = data;
             this.loadingData = false;
         });

@@ -1,57 +1,181 @@
-
 <app-navbar></app-navbar>
-<div class="details-container">
-    <!-- Loading State -->
-    <div *ngIf="loading" class="loading-spinner">
-      <mat-spinner diameter="60"></mat-spinner>
-      <p>Loading event details...</p>
+<div class="event-details-page">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!loading && error" class="error-container">
+    <mat-icon color="warn">error_outline</mat-icon>
+    <h2 class="error-title">Could Not Load Event</h2>
+    <p class="error-message">{{ error }}</p>
+    <button mat-stroked-button color="primary" (click)="goBack()">
+      Go Back
+    </button>
+  </div>
+
+  <!-- Content State -->
+  <div *ngIf="!loading && !error && event">
+    <!-- Image Header -->
+    <div class="event-header">
+      <img
+        [src]="
+          event.imageUrl ||
+          'https://images.unsplash.com/photo-1560439514-4e9645039924?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        "
+        [alt]="event.name"
+        class="event-header-image"
+      />
+      <div class="event-header-gradient"></div>
     </div>
-  
-    <!-- Event Not Found State -->
-    <div *ngIf="!loading && !event" class="not-found">
-      <h2>Event Not Found</h2>
-      <p>Sorry, we couldn't find the event you're looking for.</p>
-      <button mat-stroked-button routerLink="/public-events">
-        <mat-icon>arrow_back</mat-icon> Back to Events
-      </button>
-    </div>
-  
-    <!-- Event Found State -->
-    <mat-card *ngIf="!loading && event" class="event-details-card">
-      <mat-card-header>
-        <mat-card-title>{{ event.name }}</mat-card-title>
-        <mat-card-subtitle>Organized by {{ 'Event Team' }}</mat-card-subtitle>
-      </mat-card-header>
-  
-      <!-- Optional Image Area -->
-      <!-- <img mat-card-image [src]="event.imageUrl || 'default-event-image.jpg'" alt="Photo of {{ event.title }}"> -->
-  
-      <mat-card-content>
-        <div class="event-meta">
-          <div class="meta-item">
-            <mat-icon>calendar_today</mat-icon>
-            <span>{{ event.startDate | formatDate }}</span>
+
+    <!-- Main Content -->
+    <main class="event-content-container">
+      <div class="event-content">
+        <!-- Title, Organizer, Price -->
+        <div class="event-title-section">
+          <div>
+            <h1 class="event-title">{{ event.name }}</h1>
+            <p *ngIf="client" class="event-organizer">
+              Organized by {{ client.name }}
+            </p>
+            <p
+              *ngIf="!client && event.clientId"
+              class="event-organizer text-muted"
+            >
+              Organizer details unavailable
+            </p>
           </div>
-          <div class="meta-item">
-            <mat-icon>schedule</mat-icon>
-            <span>{{ event.startDate | formatTime }} - {{ event.endDate | formatTime }}</span>
-          </div>
-          <div class="meta-item">
-            <mat-icon>location_on</mat-icon>
-            <span>{{ "VenueHub" }}</span>
+          <div class="event-price-badge">
+            <span
+              class="badge {{
+                event.ticketPrice === 0 ? 'badge-free' : 'badge-price'
+              }}"
+            >
+              {{
+                event.ticketPrice === 0
+                  ? "Free"
+                  : (event.ticketPrice | currency : "EUR" : "symbol" : "1.2-2")
+              }}
+            </span>
           </div>
         </div>
-  
-        <p class="event-description">{{ event.description }}</p>
-      </mat-card-content>
-  
-      <mat-card-actions class="details-actions">
-        <button mat-raised-button color="accent" class="purchase-button" [routerLink]="['/events', event.id, 'checkout']">
-          <mat-icon>shopping_cart</mat-icon> Purchase Ticket
-        </button>
-      </mat-card-actions>
-    </mat-card>
-    <button (click)="payForTickets()">Pay for Tickets</button>
-    <app-footer></app-footer>
+
+        <!-- Grid Layout -->
+        <div class="event-details-grid">
+          <!-- Left Column: Tabs -->
+          <div class="event-tabs-section">
+            <mat-tab-group
+              animationDuration="0ms"
+              mat-stretch-tabs="false"
+              mat-align-tabs="start"
+            >
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <mat-icon class="tab-icon">info</mat-icon>
+                  About
+                </ng-template>
+                <div class="tab-content prose">
+                  <!-- Split description into paragraphs -->
+                  <p
+                    *ngFor="let paragraph of event.description.split('\\n\\n')"
+                  >
+                    {{ paragraph }}
+                  </p>
+                </div>
+              </mat-tab>
+              <!-- Add Schedule/FAQ tabs here if data becomes available -->
+            </mat-tab-group>
+          </div>
+
+          <!-- Right Column: Info Card & Actions -->
+          <div class="event-info-actions-section">
+            <mat-card appearance="outlined" class="info-card">
+              <mat-card-content class="info-card-content">
+                <!-- Date & Time -->
+                <div class="info-item">
+                  <mat-icon class="info-icon">calendar_today</mat-icon>
+                  <div>
+                    <p class="info-label">Date & Time</p>
+                    <p class="info-value">
+                      {{ event.startDate | date : "fullDate" }}
+                    </p>
+                    <p class="info-value">
+                      {{ event.startDate | date : "shortTime" }} –
+                      {{ event.endDate | date : "shortTime" }}
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Location -->
+                <div class="info-item">
+                  <mat-icon class="info-icon">location_on</mat-icon>
+                  <div>
+                    <p class="info-label">Location</p>
+                    <p class="info-value">
+                      {{ room?.name || "Venue details unavailable" }}
+                    </p>
+                    <!-- Add more room details if available -->
+                  </div>
+                </div>
+
+                <!-- Capacity/Tickets -->
+                <div class="info-item">
+                  <mat-icon class="info-icon">group</mat-icon>
+                  <div>
+                    <p class="info-label">Capacity</p>
+                    <p class="info-value">
+                      {{ event.ticketQuantity }} tickets available
+                    </p>
+                    <!-- Add progress bar here if attendee count becomes available -->
+                  </div>
+                </div>
+
+                <!-- Reserve Button -->
+                <button
+                  mat-flat-button
+                  color="primary"
+                  class="reserve-button"
+                  (click)="payForTickets()"
+                >
+                  <mat-icon>confirmation_number</mat-icon>
+                  Reserve Your Spot
+                </button>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Share Section (Optional)
+            <mat-card appearance="outlined" class="share-card">
+              <mat-card-content>
+                <h3 class="share-title">Share this Event</h3>
+                <div class="share-buttons">
+                  
+                  <button mat-icon-button aria-label="Share on Facebook" class="share-button facebook">
+                    <mat-icon svgIcon="facebook"></mat-icon> 
+                  <button mat-icon-button aria-label="Share on Twitter" class="share-button twitter">
+                     <mat-icon svgIcon="twitter"></mat-icon> 
+                  </button>
+                  <button mat-icon-button aria-label="Share on LinkedIn" class="share-button linkedin">
+                     <mat-icon svgIcon="linkedin"></mat-icon> 
+                  </button>
+                  <button mat-icon-button aria-label="Share via Email" class="share-button email">
+                    <mat-icon>email</mat-icon>
+                  </button>
+                </div>
+              </mat-card-content>
+            </mat-card> -->
+
+            <!-- Go Back Button -->
+            <button mat-stroked-button (click)="goBack()" class="back-button">
+              <mat-icon>arrow_back</mat-icon>
+              Back to Events
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
-  
+</div>
+
+<app-footer></app-footer>

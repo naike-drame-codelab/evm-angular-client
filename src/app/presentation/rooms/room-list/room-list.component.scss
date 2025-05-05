@@ -1,0 +1,122 @@
+// Define variables or use global ones
+:host {
+    --card-image-height: 200px;
+    --grid-gap: 1.5rem;
+  }
+  
+  .room-list-container {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .page-header {
+    position: relative;
+    height: 300px; // Adjust height as needed
+    height: 200px; // Reduced height
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover; // Cover the entire area
+      filter: blur(4px); // Blur effect
+    }
+  }
+  .page-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--primary-text-color, #333); // Use your theme variable
+  }
+  
+  .loading-indicator,
+  .error-message,
+  .no-rooms {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 40vh; // Ensure it takes up space
+    text-align: center;
+    color: var(--muted-text-color, #666); // Use your theme variable
+  
+    mat-spinner {
+      margin-bottom: 1rem;
+    }
+  
+    mat-icon {
+      font-size: 3rem;
+      width: 3rem;
+      height: 3rem;
+      margin-bottom: 0.5rem;
+    }
+  
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+  }
+  
+  .error-message {
+    color: var(--warn-color, #f44336); // Use your theme variable
+    mat-icon {
+      color: var(--warn-color, #f44336);
+    }
+  }
+  
+  
+  .room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); // Responsive grid
+    gap: var(--grid-gap);
+  }
+  
+  .room-card {
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // Add subtle shadow on hover
+    }
+  }
+  
+  .room-card-image {
+    height: var(--card-image-height);
+    object-fit: cover; // Crop image nicely
+  }
+  
+  mat-card-header {
+    padding-bottom: 0.5rem; // Adjust spacing
+  }
+  
+  mat-card-title {
+    font-size: 1.2rem;
+    font-weight: 500;
+  }
+  
+  mat-card-subtitle {
+    font-size: 0.9rem;
+    color: var(--secondary-text-color, #555); // Use your theme variable
+  }
+  
+  mat-card-content {
+    flex-grow: 1; // Allow content to push actions down
+    padding-top: 0.5rem;
+    .room-description {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--text-color, #444); // Use your theme variable
+    }
+  }
+  
+  mat-card-actions {
+    padding: 0.5rem 1rem 1rem 1rem; // Adjust padding
+  }
+  

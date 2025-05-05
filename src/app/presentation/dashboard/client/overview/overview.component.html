@@ -8,10 +8,10 @@
   
     <div class="container">
       <!-- Metrics Cards -->
-      <section class="metrics-section">
-        <h2>Venue Performance</h2>
-        <div class="metrics-grid">
-          <div class="metric-card card fade-in" *ngIf="metrics; else loadingMetrics">
+      <h2>Overview</h2>
+      <!-- <section class="metrics-section">
+        <div class="metrics-grid"> -->
+          <!-- <div class="metric-card card fade-in" *ngIf="metrics; else loadingMetrics">
             <div class="metric-icon">
               <i class="material-icons">event</i>
             </div>
@@ -20,9 +20,9 @@
               <p class="metric-value">{{ metrics.totalEvents }}</p>
               <p class="metric-detail">{{ metrics.upcomingEvents }} upcoming</p>
             </div>
-          </div>
+          </div> -->
   
-          <div class="metric-card card fade-in" *ngIf="metrics; else loadingMetrics">
+          <!-- <div class="metric-card card fade-in" *ngIf="metrics; else loadingMetrics">
             <div class="metric-icon">
               <i class="material-icons">people</i>
             </div>
@@ -30,8 +30,8 @@
               <h3>Total Clients</h3>
               <p class="metric-value">{{ metrics.totalClients }}</p>
             </div>
-          </div>
-  
+          </div> -->
+<!--   
           <div class="metric-card card fade-in" *ngIf="metrics; else loadingMetrics">
             <div class="metric-icon">
               <i class="material-icons">monetization_on</i>
@@ -52,12 +52,12 @@
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
   
       <div class="dashboard-grid">
         <!-- Upcoming Events -->
         <section class="events-section card slide-in">
-          <h2>Upcoming Events</h2>
+          <h2>Evénements à venir</h2>
           <div class="events-list" *ngIf="!loading.events; else loadingEvents">
             <div class="event-item" *ngFor="let event of upcomingEvents">
               <div class="event-date">

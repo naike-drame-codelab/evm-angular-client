@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable, of, forkJoin } from 'rxjs';
 import { map, delay } from 'rxjs/operators';
 import { EventService } from './event.service';
-import { RoomService } from './room.service';
 import { ClientService } from './client.service';
 import { EventType, EventStatus } from '../models/event.model';
 

@@ -1,38 +1,53 @@
 <nav class="navbar">
-    <div class="container navbar-content">
-      <!-- Logo -->
-      <a routerLink="/" class="navbar-logo">
-        <i class="material-icons">event_seat</i>
-        VenueHub
+  <div class="container navbar-content">
+    <!-- Logo -->
+    <a routerLink="/" class="navbar-logo">
+      <i class="material-icons">event_seat</i>
+      VenueHub
     </a>
-  
-      <!-- Navigation Links & Button -->
-      <div class="navbar-links">
-        <ul>
-          <li><a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">Accueil</a></li>
-          <li><a routerLink="/public-events" routerLinkActive="active-link">Événements</a></li>
-          <!-- Lien Inscription: pointe vers /auth avec mode=register -->
+
+    <!-- Navigation Links & Button -->
+    <div class="navbar-links">
+      <ul>
         <li>
-            <a
-              routerLink="/auth"
-              [queryParams]="{ mode: 'register' }"
-              routerLinkActive="active-link"
-              [routerLinkActiveOptions]="{ exact: false }"
-              >Inscription</a
-            >
-          </li>
-        </ul>
-        <!-- Bouton Connexion: pointe vers /auth avec mode=login (ou sans queryParams si login est le défaut) -->
-        <button
-          mat-stroked-button
-          color="primary"
-          routerLink="/auth"
-          [queryParams]="{ mode: 'login' }"
-          class="login-button"
-        >
-          Connexion
-        </button>
-      </div>
+          <a
+            routerLink="/"
+            routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{ exact: true }"
+            >Accueil</a
+          >
+        </li>
+        <li>
+          <a routerLink="/public-events" routerLinkActive="active-link"
+            >Événements</a
+          >
+        </li>
+        <li>
+          <a routerLink="/rooms" routerLinkActive="active-link">
+            Salles
+          </a>
+        </li>
+        <!-- Lien Inscription: pointe vers /auth avec mode=register -->
+        <li>
+          <a
+            routerLink="/auth"
+            [queryParams]="{ mode: 'register' }"
+            routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{ exact: false }"
+            >Inscription</a
+          >
+        </li>
+      </ul>
+      <!-- Bouton Connexion: pointe vers /auth avec mode=login (ou sans queryParams si login est le défaut) -->
+      <button
+        mat-stroked-button
+        color="primary"
+        routerLink="/auth"
+        [queryParams]="{ mode: 'login' }"
+        class="login-button"
+      >
+        Connexion
+      </button>
     </div>
-  </nav>
-  
+  </div>
+</nav>

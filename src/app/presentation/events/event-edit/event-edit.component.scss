@@ -1,0 +1,74 @@
+@use '@angular/material' as mat;
+
+.form-container {
+  max-width: 800px; // Limit form width for better readability
+  margin: 2rem auto; // Center the form on the page
+  padding: 1rem; // Add some padding around the card
+
+  // Target the mat-card inside the container
+  mat-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); // Add a subtle box shadow
+    border-radius: 8px; // Optional: Slightly round the corners
+  }
+}
+
+mat-card-header {
+  padding-bottom: 1rem; // Add space below the header
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12); // Use theme divider color if available: var(--divider-color)
+  margin-bottom: 1.5rem;
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  gap: 1rem;
+  color: rgba(0, 0, 0, 0.6); // Use theme secondary text color if available: var(--text-secondary)
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; // Add vertical space between form fields
+}
+
+// Ensure full width for form fields by default
+mat-form-field {
+  width: 100%;
+}
+
+// Layout for side-by-side fields
+.date-range,
+.ticket-info {
+  display: flex;
+  gap: 1rem; // Space between the fields
+  flex-wrap: wrap; // Allow wrapping on smaller screens
+
+  mat-form-field {
+    flex: 1 1 calc(25% - 0.75rem); // Adjust for 4 fields: 100% / 4 = 25%. Gap is 1rem, so 3 gaps total = 3rem. 3rem / 4 fields = 0.75rem per field.
+    min-width: 150px; // Ensure fields don't get too small
+  }
+}
+
+.ticket-info mat-form-field {
+  flex: 1 1 calc(50% - 0.5rem); // Reset for 2 fields
+}
+
+mat-card-actions {
+  margin-top: 1.5rem; // Add space above the action buttons
+}
+
+// Styles for FormArray sections (e.g., Catering, Material)
+.form-array-section {
+  border: 1px solid rgba(0,0,0,0.1); // Use theme variable if available
+  border-radius: 4px; // Use theme variable if available
+  padding: 1rem;
+  margin-top: 1rem;
+
+  h4 { margin-top: 0; margin-bottom: 1rem; }
+
+  .form-array-item { display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .catering-select, .material-select { flex: 3; }
+  .catering-quantity, .material-quantity { flex: 1; }
+}

@@ -73,19 +73,19 @@ export class EventService {
   }
 
   updateEvent(id: string, eventData: Partial<Event>): Observable<Event> { // Use Partial for updates
-    return this.httpClient.put<Event>(`${environment.apiUrl}/${id}`, eventData).pipe(
+    return this.httpClient.put<Event>(`${environment.apiUrl}/event/${id}`, eventData).pipe(
       catchError(this.handleError)
     );
   }
 
   deleteEvent(id: string): Observable<void> { // Often returns no content on success
-    return this.httpClient.delete<void>(`${environment.apiUrl}/${id}`).pipe(
+    return this.httpClient.delete<void>(`${environment.apiUrl}/event/${id}`).pipe(
       catchError(this.handleError)
     );
   }
 
   getRooms(): Observable<any[]> {
-    return this.httpClient.get<any[]>(`${environment.apiUrl}/room`).pipe(
+    return this.httpClient.get<any[]>(`${environment.apiUrl}/room/list`).pipe(
       catchError(this.handleError));
   }
 

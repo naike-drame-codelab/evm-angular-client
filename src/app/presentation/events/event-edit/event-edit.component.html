@@ -1,1 +1,211 @@
-<p>event-edit works!</p>
+<div class="form-container">
+  <mat-card>
+    <mat-card-header>
+      <!-- Changed Title -->
+      <mat-card-title>Mettre à jour</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div *ngIf="loadingData" class="loading-spinner">
+        <mat-spinner diameter="40"></mat-spinner> Loading event data...
+      </div>
+
+      <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" *ngIf="!loadingData">
+        <!-- Name -->
+        <mat-form-field appearance="fill">
+          <mat-label>Nom de l'événement</mat-label>
+          <input matInput formControlName="name" required>
+          <mat-error *ngIf="eventForm.get('name')?.hasError('required')">Name is required</mat-error>
+        </mat-form-field>
+
+        <!-- Description -->
+        <mat-form-field appearance="fill">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="4" required></textarea>
+          <mat-error *ngIf="eventForm.get('description')?.hasError('required')">Description is required</mat-error>
+        </mat-form-field>
+
+        <!-- Dates & Times -->
+        <div class="date-range">
+          <mat-form-field appearance="fill">
+            <mat-label>Date de début</mat-label>
+            <input matInput [matDatepicker]="startDatePicker" formControlName="startDate" required>
+            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+             <mat-error *ngIf="eventForm.get('startDate')?.hasError('required')">Start date is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Heure de début</mat-label>
+            <input matInput type="time" formControlName="startTime" required placeholder="HH:mm">
+            <mat-error *ngIf="eventForm.get('startTime')?.hasError('required')">Start time is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Date de fin</mat-label>
+            <input matInput [matDatepicker]="endDatePicker" formControlName="endDate" required>
+            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+             <mat-error *ngIf="eventForm.get('endDate')?.hasError('required')">End date is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Heure de fin</mat-label>
+            <input matInput type="time" formControlName="endTime" required placeholder="HH:mm">
+            <mat-error *ngIf="eventForm.get('endTime')?.hasError('required')">End time is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Type -->
+        <mat-form-field appearance="fill">
+          <mat-label>Type d'événement</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option *ngFor="let type of eventTypes" [value]="type">
+              {{ type }}
+            </mat-option>
+          </mat-select>
+           <mat-error *ngIf="eventForm.get('type')?.hasError('required')">Type is required</mat-error>
+        </mat-form-field>
+
+        <!-- Status -->
+        <mat-form-field appearance="fill">
+          <mat-label>Statut</mat-label>
+          <mat-select formControlName="status" required>
+            <mat-option *ngFor="let status of eventStatuses" [value]="status">
+              {{ status }}
+            </mat-option>
+          </mat-select>
+           <mat-error *ngIf="eventForm.get('status')?.hasError('required')">Status is required</mat-error>
+        </mat-form-field>
+
+        <!-- Client -->
+        <mat-form-field appearance="fill">
+          <mat-label>Client</mat-label>
+          <mat-select formControlName="clientId" required>
+            <mat-option *ngFor="let client of clients" [value]="client.id">
+              {{ client.name }} <!-- Assuming client has name property -->
+            </mat-option>
+          </mat-select>
+           <mat-error *ngIf="eventForm.get('clientId')?.hasError('required')">Client is required</mat-error>
+        </mat-form-field>
+
+        <!-- Room Reservations (Multi-select) -->
+        <mat-form-field appearance="fill">
+          <mat-label>Salle réservées</mat-label>
+          <mat-select formControlName="roomReservations" multiple required>
+            <mat-option *ngFor="let room of rooms" [value]="room.id">
+              {{ room.name }} <!-- Assuming room has name property -->
+            </mat-option>
+          </mat-select>
+           <mat-error *ngIf="eventForm.get('roomReservations')?.hasError('required') || eventForm.get('roomReservations')?.hasError('minlength')">
+             At least one room must be selected
+           </mat-error>
+        </mat-form-field>
+
+        <!-- Material Options (FormArray) -->
+        <div class="form-array-section">
+          <h4>Options de matériel</h4>
+          <div formArrayName="materialOptions">
+            <div *ngFor="let option of materialOptions.controls; let i=index" [formGroupName]="i" class="form-array-item">
+
+              <mat-form-field appearance="fill" class="material-select">
+                <mat-label>Matériel</mat-label>
+                <mat-select formControlName="materialId" required>
+                  <mat-option *ngFor="let material of materials" [value]="material.id">
+                    {{ material.name }} <!-- Assuming material has name -->
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="option.get('materialId')?.hasError('required')">Required</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="material-quantity">
+                <mat-label>Quantité</mat-label>
+                <input matInput type="number" formControlName="quantity" required min="1">
+                <mat-error *ngIf="option.get('quantity')?.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="option.get('quantity')?.hasError('min')">Min 1</mat-error>
+              </mat-form-field>
+
+              <button mat-icon-button color="warn" type="button" (click)="removeMaterialOption(i)" aria-label="Remove material option">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <button mat-stroked-button type="button" (click)="addMaterialOption()">
+            <mat-icon>add</mat-icon> Ajouter une option
+          </button>
+        </div>
+
+        <!-- Catering Options (FormArray) -->
+        <div class="form-array-section">
+          <h4>Options de catering</h4>
+          <div formArrayName="cateringOptions">
+            <div *ngFor="let option of cateringOptions.controls; let i=index" [formGroupName]="i" class="form-array-item">
+
+              <mat-form-field appearance="fill" class="catering-select">
+                <mat-label>Catering Service</mat-label>
+                <mat-select formControlName="cateringId" required>
+                  <mat-option *ngFor="let catering of caterings" [value]="catering.id">
+                    {{ catering.name }} <!-- Assuming catering has name -->
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="option.get('cateringId')?.hasError('required')">Required</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill" class="catering-quantity">
+                <mat-label>Nombre de personnes</mat-label>
+                <input matInput type="number" formControlName="numberOfPeople" required min="1">
+                <mat-error *ngIf="option.get('numberOfPeople')?.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="option.get('numberOfPeople')?.hasError('min')">Min 1</mat-error>
+              </mat-form-field>
+
+              <button mat-icon-button color="warn" type="button" (click)="removeCateringOption(i)" aria-label="Remove catering option">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+          <button mat-stroked-button type="button" (click)="addCateringOption()">
+            <mat-icon>add</mat-icon> Ajouter une option
+          </button>
+        </div>
+
+        <!-- Ticket Price & Quantity -->
+         <div class="ticket-info">
+            <mat-form-field appearance="fill">
+              <mat-label>Prix du ticket (€)</mat-label>
+              <input matInput type="number" formControlName="ticketPrice" required min="0">
+              <mat-error *ngIf="eventForm.get('ticketPrice')?.hasError('required')">Price is required</mat-error>
+              <mat-error *ngIf="eventForm.get('ticketPrice')?.hasError('min')">Price cannot be negative</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Quantité disponible</mat-label>
+              <input matInput type="number" formControlName="ticketQuantity" required min="1">
+               <mat-error *ngIf="eventForm.get('ticketQuantity')?.hasError('required')">Quantity is required</mat-error>
+               <mat-error *ngIf="eventForm.get('ticketQuantity')?.hasError('min')">Quantity must be at least 1</mat-error>
+            </mat-form-field>
+         </div>
+
+        <!-- Image URL (Optional) -->
+        <mat-form-field appearance="fill">
+          <mat-label>Image URL (optionnel)</mat-label>
+          <input matInput formControlName="imageUrl">
+        </mat-form-field>
+
+        <!-- Display overall date/time validation error -->
+        <mat-error *ngIf="eventForm.hasError('dateTimeInvalid') && (eventForm.get('endDate')?.touched || eventForm.get('endTime')?.touched)">
+          End date and time must be after start date and time.
+        </mat-error>
+
+        <mat-card-actions align="end">
+          <!-- Adjusted Cancel Link -->
+          <button mat-stroked-button type="button" [routerLink]="['/client/events', eventId, 'details']" *ngIf="eventId">Cancel</button>
+          <button mat-stroked-button type="button" routerLink="/client/events" *ngIf="!eventId">Cancel</button> <!-- Fallback if no ID -->
+          <!-- Changed Submit Button Text -->
+          <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
+            <mat-spinner *ngIf="isSubmitting" diameter="20" style="display: inline-block; margin-right: 8px;"></mat-spinner>
+            {{ isSubmitting ? 'En cours...' : 'Mettre à jour' }}
+          </button>
+        </mat-card-actions>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

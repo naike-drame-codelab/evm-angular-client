@@ -58,6 +58,7 @@ export class AuthComponent {
     if (this.loginForm.valid) {
       console.log('Login Form Submitted:', this.loginForm.value);
       // TODO: Implémenter la logique de connexion
+      this.router.navigate(['/admin/overview']); // <-- Add this line
     } else {
       this.loginForm.markAllAsTouched();
     }
@@ -66,6 +67,7 @@ export class AuthComponent {
   onSubmitRegister(): void {
     if (this.registerForm.valid) {
       console.log('Register Form Submitted:', this.registerForm.value);
+      this.router.navigate(['/admin/overview']);
       // TODO: Implémenter la logique d'inscription
     } else {
       this.registerForm.markAllAsTouched();

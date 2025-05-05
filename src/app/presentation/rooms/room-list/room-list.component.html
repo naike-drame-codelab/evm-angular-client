@@ -1,0 +1,54 @@
+<app-navbar></app-navbar>
+<!-- Header Section -->
+<div class="page-header">
+    <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1400&auto=format&fit=crop" alt="Venue Header" class="header-image">
+    <div class="header-overlay"></div>
+  </div>
+<div class="room-list-container">
+    <h1 class="page-title">Nos salles disponibles</h1>
+  
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-indicator">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Loading rooms...</p>
+    </div>
+  
+    <!-- Error State -->
+    <div *ngIf="!loading && error" class="error-message">
+      <mat-icon color="warn">error_outline</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-stroked-button color="primary" (click)="retryLoadRooms()">Retry</button>
+    </div>
+  
+    <!-- Content State -->
+    <div *ngIf="!loading && !error" class="room-grid">
+      <mat-card *ngFor="let room of rooms" class="room-card" appearance="outlined">
+        <img mat-card-image
+        [src]="getRoomImageUrl(room.id)"
+             [alt]="room.name"
+             class="room-card-image">
+        <mat-card-header>
+          <mat-card-title>{{ room.name }}</mat-card-title>
+          <mat-card-subtitle>
+            Capacity: {{ room.capacity }} | {{ room.pricePerHour | currency:'EUR':'symbol':'1.0-0' }}/hr
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="room-description">{{ room.description | slice:0:100 }}{{ room.description.length > 100 ? '...' : '' }}</p>
+        </mat-card-content>
+        <mat-card-actions align="end">
+          <!-- Add routerLink if you have a room details page -->
+          <!-- <button mat-button color="primary" [routerLink]="['/rooms', room.id]">View Details</button> -->
+          <button mat-flat-button color="primary">Réservez maintenant</button> <!-- Placeholder -->
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  
+     <!-- No Rooms Found -->
+     <div *ngIf="!loading && !error && rooms.length === 0" class="no-rooms">
+       <mat-icon>meeting_room</mat-icon>
+       <p>No rooms found.</p>
+     </div>
+  
+  </div>
+  <app-footer></app-footer>
